@@ -13,12 +13,13 @@
 
 
 //==============================================================================
-OdAudioMidiExpressionPluginAudioProcessor::OdAudioMidiExpressionPluginAudioProcessor()
+OdAudioMidiExpressionPluginAudioProcessor::OdAudioMidiExpressionPluginAudioProcessor() :    midiOutput(nullptr)
 {
 }
 
 OdAudioMidiExpressionPluginAudioProcessor::~OdAudioMidiExpressionPluginAudioProcessor()
 {
+    midiOutput = nullptr;
 }
 
 //==============================================================================
@@ -159,6 +160,15 @@ void OdAudioMidiExpressionPluginAudioProcessor::setStateInformation (const void*
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(MidiOutput *mo) {
+    midiOutput = mo;
+    if(midiOutput != nullptr) {
+        MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
+        std::cout << "sending message" << std::endl;
+        midiOutput->sendMessageNow(message);
+    }
 }
 
 //==============================================================================
