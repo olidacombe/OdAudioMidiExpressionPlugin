@@ -16,6 +16,11 @@
 OdAudioMidiExpressionPluginAudioProcessorEditor::OdAudioMidiExpressionPluginAudioProcessorEditor (OdAudioMidiExpressionPluginAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
+    addAndMakeVisible(midiOutputList);
+    midiOutputList.setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
+    const StringArray midiOutputs(MidiOutput::getDevices());
+    midiOutputList.addItemList(midiOutputs, 1);
+    midiOutputList.addListener(this);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
@@ -37,6 +42,16 @@ void OdAudioMidiExpressionPluginAudioProcessorEditor::paint (Graphics& g)
 
 void OdAudioMidiExpressionPluginAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    Rectangle<int> area(getLocalBounds());
+    midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
+}
+
+void OdAudioMidiExpressionPluginAudioProcessorEditor::setMidiOutput(int index) {
+    midiOutputList.setSelectedId(index + 1, dontSendNotification);
+}
+
+void OdAudioMidiExpressionPluginAudioProcessorEditor::comboBoxChanged(ComboBox* box) {
+    if(box == &midiOutputList) {
+        setMidiOutput(midiOutputList.getSelectedItemIndex());
+    }
 }

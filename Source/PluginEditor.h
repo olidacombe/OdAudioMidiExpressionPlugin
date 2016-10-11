@@ -18,7 +18,8 @@
 //==============================================================================
 /**
 */
-class OdAudioMidiExpressionPluginAudioProcessorEditor  : public AudioProcessorEditor
+class OdAudioMidiExpressionPluginAudioProcessorEditor  : public AudioProcessorEditor,
+                                                        private ComboBox::Listener
 {
 public:
     OdAudioMidiExpressionPluginAudioProcessorEditor (OdAudioMidiExpressionPluginAudioProcessor&);
@@ -27,11 +28,14 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void setMidiOutput(int index);
+    void comboBoxChanged(ComboBox* box) override;
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     OdAudioMidiExpressionPluginAudioProcessor& processor;
+    ComboBox midiOutputList;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OdAudioMidiExpressionPluginAudioProcessorEditor)
 };
