@@ -23,14 +23,16 @@ to be sent - making that a worker thread.
 
 class OdAudioMidiExpressionPluginAudioProcessor;
 
-class MidiOutWorker : public Thread
+class MidiOutWorker : public Timer
 {
 public:
     MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p);
     ~MidiOutWorker();
-    void run() override;
+    void timerCallback() override;
     int setMidiOutput(int index);
 private:
+    void sendMessage(float expression);
+    
     OdAudioMidiExpressionPluginAudioProcessor *processor;
     ScopedPointer<MidiOutput> midiOutput;
 };

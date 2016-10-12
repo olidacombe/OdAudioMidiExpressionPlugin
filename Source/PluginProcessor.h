@@ -54,7 +54,6 @@ public:
 
 private:
     //==============================================================================
-    ScopedPointer<MidiOutput> midiOutput;
     ScopedPointer<MidiOutWorker> midiOutWorker;
     
     float currentExpressionValue;

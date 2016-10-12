@@ -14,7 +14,7 @@
 
 MidiOutWorker::MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p)
 :
-    Thread("Midi Output Worker"),
+    //Thread("Midi Output Worker"),
     processor(p)
 {
 
@@ -22,23 +22,26 @@ MidiOutWorker::MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p)
 
 MidiOutWorker::~MidiOutWorker()
 {
-    stopThread(2000);
+    //stopThread(2000);
+    
 }
 
-void MidiOutWorker::run()
-{
-    const MessageManagerLock mml (Thread::getCurrentThread());
-
-    if (! mml.lockWasGained())
-        return;
-    
+void MidiOutWorker::timerCallback()
+{    
     float expression = processor->getExpressionValue();    
     
-    // mml falls out of scope and gets deleted
+    sendMessage(expression);
+}
+
+void MidiOutWorker::sendMessage(float expression) {
+    const int outputCCValue = 127.0 * expression;
+    DBG(String("sending message ") + String(outputCCValue));
+    MidiMessage message = MidiMessage::controllerEvent(1, 20, outputCCValue);
 }
 
 int MidiOutWorker::setMidiOutput(int index) {
     
+    stopTimer();
     midiOutput = nullptr;
 
     if (MidiOutput::getDevices() [index].isNotEmpty())
@@ -48,6 +51,9 @@ int MidiOutWorker::setMidiOutput(int index) {
         MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
         DBG("sending message");
         midiOutput->sendMessageNow(message);
+        
+        startTimer(300);
+        
         return index+1; // appropriate for ComboBox
     } 
     return 0;
