@@ -15,7 +15,8 @@
 MidiOutWorker::MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p)
 :
     //Thread("Midi Output Worker"),
-    processor(p)
+    processor(p),
+    lastOutputCCValue(0), currentOutputCCValue(0)
 {
 
 }
@@ -29,14 +30,17 @@ MidiOutWorker::~MidiOutWorker()
 void MidiOutWorker::timerCallback()
 {    
     float expression = processor->getExpressionValue();    
-    
-    sendMessage(expression);
+    currentOutputCCValue = 127.0 * expression;
+    if(currentOutputCCValue != lastOutputCCValue) {
+        sendMessage();
+        lastOutputCCValue = currentOutputCCValue;
+    }
 }
 
-void MidiOutWorker::sendMessage(float expression) {
-    const int outputCCValue = 127.0 * expression;
-    DBG(String("sending message ") + String(outputCCValue));
-    MidiMessage message = MidiMessage::controllerEvent(1, 20, outputCCValue);
+void MidiOutWorker::sendMessage() {
+    MidiMessage message = MidiMessage::controllerEvent(1, 20, currentOutputCCValue);
+    DBG(String("sending message ") + String(currentOutputCCValue));
+    midiOutput->sendMessageNow(message);
 }
 
 int MidiOutWorker::setMidiOutput(int index) {
@@ -48,9 +52,11 @@ int MidiOutWorker::setMidiOutput(int index) {
     {
         midiOutput = MidiOutput::openDevice (index);
         jassert (midiOutput);
+        /*
         MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
         DBG("sending message");
         midiOutput->sendMessageNow(message);
+        */
         
         startTimer(300);
         

@@ -31,8 +31,8 @@ public:
     void timerCallback() override;
     int setMidiOutput(int index);
 private:
-    void sendMessage(float expression);
-    
+    void sendMessage();
+    int lastOutputCCValue, currentOutputCCValue;
     OdAudioMidiExpressionPluginAudioProcessor *processor;
     ScopedPointer<MidiOutput> midiOutput;
 };
