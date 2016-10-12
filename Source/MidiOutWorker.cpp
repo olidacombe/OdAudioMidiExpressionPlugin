@@ -11,6 +11,7 @@
 #include "MidiOutWorker.h"
 #include "PluginProcessor.h"
 
+#include "../JuceLibraryCode/JuceHeader.h"
 
 MidiOutWorker::MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p)
 :
@@ -30,7 +31,7 @@ MidiOutWorker::~MidiOutWorker()
 void MidiOutWorker::timerCallback()
 {    
     float expression = processor->getExpressionValue();    
-    currentOutputCCValue = 127.0 * expression;
+    currentOutputCCValue = jmin(127.0 * expression, 127.0);
     if(currentOutputCCValue != lastOutputCCValue) {
         sendMessage();
         lastOutputCCValue = currentOutputCCValue;
@@ -58,7 +59,7 @@ int MidiOutWorker::setMidiOutput(int index) {
         midiOutput->sendMessageNow(message);
         */
         
-        startTimer(300);
+        startTimer(30);
         
         return index+1; // appropriate for ComboBox
     } 

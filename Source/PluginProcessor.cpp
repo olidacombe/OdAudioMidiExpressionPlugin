@@ -121,7 +121,7 @@ void OdAudioMidiExpressionPluginAudioProcessor::processBlock (AudioSampleBuffer&
     }
     
     // go atomic...?
-    currentExpressionValue = 0.5*(currentExpressionValue + incomingLoudness);
+    currentExpressionValue = 0.9*(currentExpressionValue + incomingLoudness);
 }
 
 int OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
