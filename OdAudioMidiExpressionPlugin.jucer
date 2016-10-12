@@ -12,6 +12,9 @@
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.4">
   <MAINGROUP id="ZprtxY" name="OdAudioMidiExpressionPlugin">
     <GROUP id="{6D9671D0-4E10-D6D2-D21E-D379EA550EA5}" name="Source">
+      <FILE id="ncI2gl" name="MidiOutWorker.cpp" compile="1" resource="0"
+            file="Source/MidiOutWorker.cpp"/>
+      <FILE id="XLhBDh" name="MidiOutWorker.h" compile="0" resource="0" file="Source/MidiOutWorker.h"/>
       <FILE id="m0p1o7" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Z8Bh6G" name="PluginProcessor.h" compile="0" resource="0"

@@ -3,12 +3,16 @@
 
 
 //==============================================================================
-OdAudioMidiExpressionPluginAudioProcessor::OdAudioMidiExpressionPluginAudioProcessor() :    midiOutput(nullptr)
+OdAudioMidiExpressionPluginAudioProcessor::OdAudioMidiExpressionPluginAudioProcessor()
+:   midiOutput(nullptr),
+    currentExpressionValue(0.0)
 {
+    midiOutWorker = new MidiOutWorker(this);
 }
 
 OdAudioMidiExpressionPluginAudioProcessor::~OdAudioMidiExpressionPluginAudioProcessor()
 {
+    midiOutWorker = nullptr;
     midiOutput = nullptr;
 }
 
@@ -107,6 +111,7 @@ void OdAudioMidiExpressionPluginAudioProcessor::processBlock (AudioSampleBuffer&
 {
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
+    const int numSamples = buffer.getNumSamples();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -115,16 +120,20 @@ void OdAudioMidiExpressionPluginAudioProcessor::processBlock (AudioSampleBuffer&
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear (i, 0, numSamples);
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
+    float incomingLoudness;
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        float* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        incomingLoudness += buffer.getRMSLevel(channel, 0, numSamples);
     }
+    
+    // go atomic...?
+    currentExpressionValue = 0.5*(currentExpressionValue + incomingLoudness);
+}
+
+int OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
+    return midiOutWorker->setMidiOutput(index);
 }
 
 //==============================================================================
@@ -152,20 +161,8 @@ void OdAudioMidiExpressionPluginAudioProcessor::setStateInformation (const void*
     // whose contents will have been created by the getStateInformation() call.
 }
 
-int OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
-    
-    midiOutput = nullptr;
-
-    if (MidiOutput::getDevices() [index].isNotEmpty())
-    {
-        midiOutput = MidiOutput::openDevice (index);
-        jassert (midiOutput);
-        MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
-        std::cout << "sending message" << std::endl;
-        midiOutput->sendMessageNow(message);
-        return index+1; // appropriate for ComboBox
-    } 
-    return 0;
+float OdAudioMidiExpressionPluginAudioProcessor::getExpressionValue() {
+    return currentExpressionValue;
 }
 
 //==============================================================================

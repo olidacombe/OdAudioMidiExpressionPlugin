@@ -2,6 +2,7 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MidiOutWorker.h"
 
 
 //==============================================================================
@@ -48,10 +49,15 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     int setMidiOutput(int index);
+    
+    float getExpressionValue();
 
 private:
     //==============================================================================
     ScopedPointer<MidiOutput> midiOutput;
+    ScopedPointer<MidiOutWorker> midiOutWorker;
+    
+    float currentExpressionValue;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OdAudioMidiExpressionPluginAudioProcessor)
 };
