@@ -28,7 +28,7 @@ OdAudioMidiExpressionPluginAudioProcessorEditor::OdAudioMidiExpressionPluginAudi
 
 OdAudioMidiExpressionPluginAudioProcessorEditor::~OdAudioMidiExpressionPluginAudioProcessorEditor()
 {
-    midiOutput = nullptr;
+    //midiOutput = nullptr;
 }
 
 //==============================================================================
@@ -48,11 +48,11 @@ void OdAudioMidiExpressionPluginAudioProcessorEditor::resized()
 }
 
 void OdAudioMidiExpressionPluginAudioProcessorEditor::setMidiOutput(int index) {
-    midiOutput = MidiOutput::openDevice(index);
-    if(midiOutput != nullptr) {
+    //midiOutput = MidiOutput::openDevice(index);
+    //if(midiOutput != nullptr) {
         midiOutputList.setSelectedId(index + 1, dontSendNotification);
-        processor.setMidiOutput(midiOutput);
-    }
+        processor.setMidiOutput(index);
+    //}
 }
 
 void OdAudioMidiExpressionPluginAudioProcessorEditor::comboBoxChanged(ComboBox* box) {

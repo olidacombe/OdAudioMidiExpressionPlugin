@@ -162,8 +162,8 @@ void OdAudioMidiExpressionPluginAudioProcessor::setStateInformation (const void*
     // whose contents will have been created by the getStateInformation() call.
 }
 
-void OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(MidiOutput *mo) {
-    midiOutput = mo;
+void OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
+    midiOutput = MidiOutput::openDevice(index);
     if(midiOutput != nullptr) {
         MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
         std::cout << "sending message" << std::endl;
