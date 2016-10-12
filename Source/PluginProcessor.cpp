@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -162,13 +152,20 @@ void OdAudioMidiExpressionPluginAudioProcessor::setStateInformation (const void*
     // whose contents will have been created by the getStateInformation() call.
 }
 
-void OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
-    midiOutput = MidiOutput::openDevice(index);
-    if(midiOutput != nullptr) {
+int OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
+    
+    midiOutput = nullptr;
+
+    if (MidiOutput::getDevices() [index].isNotEmpty())
+    {
+        midiOutput = MidiOutput::openDevice (index);
+        jassert (midiOutput);
         MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
         std::cout << "sending message" << std::endl;
         midiOutput->sendMessageNow(message);
-    }
+        return index+1; // appropriate for ComboBox
+    } 
+    return 0;
 }
 
 //==============================================================================

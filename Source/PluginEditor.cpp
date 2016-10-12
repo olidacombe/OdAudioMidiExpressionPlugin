@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -50,9 +40,10 @@ void OdAudioMidiExpressionPluginAudioProcessorEditor::resized()
 void OdAudioMidiExpressionPluginAudioProcessorEditor::setMidiOutput(int index) {
     //midiOutput = MidiOutput::openDevice(index);
     //if(midiOutput != nullptr) {
-        midiOutputList.setSelectedId(index + 1, dontSendNotification);
-        processor.setMidiOutput(index);
+    //    midiOutputList.setSelectedId(index + 1, dontSendNotification);
+    //    processor.setMidiOutput(index);
     //}
+    midiOutputList.setSelectedId(processor.setMidiOutput(index));
 }
 
 void OdAudioMidiExpressionPluginAudioProcessorEditor::comboBoxChanged(ComboBox* box) {
