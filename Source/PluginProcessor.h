@@ -56,6 +56,7 @@ public:
 private:
     //==============================================================================
     ScopedPointer<MidiOutWorker> midiOutWorker;
+    AudioProcessorValueTreeState parameters;
     
     float currentExpressionValue;
     

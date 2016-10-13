@@ -4,7 +4,7 @@
 
 //==============================================================================
 OdAudioMidiExpressionPluginAudioProcessor::OdAudioMidiExpressionPluginAudioProcessor()
-:   currentExpressionValue(0.0)
+:   currentExpressionValue(0.0), parameters(*this, nullptr)
 {
     midiOutWorker = new MidiOutWorker(this);
 }
