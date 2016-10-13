@@ -9,14 +9,14 @@
 */
 
 #include "MidiOutWorker.h"
-#include "PluginProcessor.h"
+//#include "PluginProcessor.h"
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-MidiOutWorker::MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p)
+MidiOutWorker::MidiOutWorker(ExpressionValueSource* e)
 :
     //Thread("Midi Output Worker"),
-    processor(p),
+    evs(e),
     lastOutputCCValue(0), currentOutputCCValue(0)
 {
 
@@ -30,7 +30,7 @@ MidiOutWorker::~MidiOutWorker()
 
 void MidiOutWorker::timerCallback()
 {    
-    float expression = processor->getExpressionValue();    
+    float expression = evs->getExpressionValue();    
     currentOutputCCValue = jmin(127.0 * expression, 127.0);
     if(currentOutputCCValue != lastOutputCCValue) {
         sendMessage();

@@ -13,6 +13,11 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+class ExpressionValueSource {
+public:
+    virtual float getExpressionValue()=0;
+};
+
 /*
 
 This will be responsible for sending out midi messages.  I may "unthread" this,
@@ -26,14 +31,14 @@ class OdAudioMidiExpressionPluginAudioProcessor;
 class MidiOutWorker : public Timer
 {
 public:
-    MidiOutWorker(OdAudioMidiExpressionPluginAudioProcessor* p);
+    MidiOutWorker(ExpressionValueSource* e);
     ~MidiOutWorker();
     void timerCallback() override;
     int setMidiOutput(int index);
 private:
     void sendMessage();
     int lastOutputCCValue, currentOutputCCValue;
-    OdAudioMidiExpressionPluginAudioProcessor *processor;
+    ExpressionValueSource *evs;
     ScopedPointer<MidiOutput> midiOutput;
 };
 

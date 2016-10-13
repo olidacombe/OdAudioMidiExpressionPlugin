@@ -8,7 +8,8 @@
 //==============================================================================
 /**
 */
-class OdAudioMidiExpressionPluginAudioProcessor  : public AudioProcessor
+class OdAudioMidiExpressionPluginAudioProcessor  : public AudioProcessor,
+                                                    public ExpressionValueSource
 {
 public:
 
@@ -50,7 +51,7 @@ public:
     
     int setMidiOutput(int index);
     
-    float getExpressionValue();
+    float getExpressionValue() override;
 
 private:
     //==============================================================================
