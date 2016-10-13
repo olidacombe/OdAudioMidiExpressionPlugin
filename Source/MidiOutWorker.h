@@ -15,6 +15,7 @@
 
 class ExpressionValueSource {
 public:
+    virtual ~ExpressionValueSource() {};
     virtual float getExpressionValue()=0;
 };
 
