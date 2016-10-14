@@ -2,9 +2,15 @@
 
 
 //==============================================================================
-PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
+PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
+    
+    thruButton.setButtonText ("Thru");
+    addAndMakeVisible (thruButton);
+    thruAttachment = new ButtonAttachment (valueTreeState, "thru", thruButton);
+    
+    
     addAndMakeVisible(midiOutputList);
     midiOutputList.setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
     const StringArray midiOutputs(MidiOutput::getDevices());
@@ -33,6 +39,7 @@ void PluginProcessorEditor::paint (Graphics& g)
 void PluginProcessorEditor::resized()
 {
     Rectangle<int> area(getLocalBounds());
+    thruButton.setBounds(area.removeFromTop(20));
     midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
 }
 

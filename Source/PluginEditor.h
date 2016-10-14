@@ -12,8 +12,10 @@ class PluginProcessorEditor  : public AudioProcessorEditor,
                                                         private ComboBox::Listener
 {
 public:
-    PluginProcessorEditor (PluginProcessor&);
+    PluginProcessorEditor (PluginProcessor&, AudioProcessorValueTreeState&);
     ~PluginProcessorEditor();
+    
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -25,6 +27,11 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PluginProcessor& processor;
+    AudioProcessorValueTreeState& valueTreeState;
+    
+    ToggleButton thruButton;
+    ScopedPointer<ButtonAttachment> thruAttachment;
+    
     ComboBox midiOutputList;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessorEditor)

@@ -53,9 +53,6 @@ public:
     
     float getExpressionValue() override;
     
-    static float textToThru (const String& text);
-    static String thruToText (float value);
-    
 
 private:
     //==============================================================================

@@ -7,10 +7,22 @@ PluginProcessor::PluginProcessor()
 :   currentExpressionValue(0.0), parameters(*this, nullptr)
 {
     parameters.createAndAddParameter ("thru", "Thru", String(),
-                                          NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
-                                          thruToText,    // value to text function
-                                          textToThru);   // text to value function
+        NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
+        [](float value)
+        {
+          // value to text function
+          return value < 0.5 ? "Mute" : "Thru";
+        },
+        [](const String& text)
+        {
+          // text to value function
+          if (text == "Mute")    return 0.0f;
+          if (text == "Thru")  return 1.0f;
+          return 0.0f;
+    });
     
+    parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
+                                          
     midiOutWorker = new MidiOutWorker(this);
 }
 
@@ -18,21 +30,6 @@ PluginProcessor::~PluginProcessor()
 {
     midiOutWorker = nullptr;
 }
-
-
-String PluginProcessor::thruToText (float value)
-{
-    return value < 0.5 ? "Normal" : "Inverted";
-}
-    
-float PluginProcessor::textToThru (const String& text)
-{
-    if (text == "Normal")    return 0.0f;
-    if (text == "Inverted")  return 1.0f;
-    return 0.0f;
-}
-    
-    
 
 
 //==============================================================================
@@ -157,21 +154,23 @@ bool PluginProcessor::hasEditor() const
 
 AudioProcessorEditor* PluginProcessor::createEditor()
 {
-    return new PluginProcessorEditor (*this);
+    return new PluginProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    ScopedPointer<XmlElement> xml (parameters.state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+        
+    if (xmlState != nullptr)
+        if (xmlState->hasTagName (parameters.state.getType()))
+            parameters.state = ValueTree::fromXml (*xmlState);
 }
 
 float PluginProcessor::getExpressionValue() {
