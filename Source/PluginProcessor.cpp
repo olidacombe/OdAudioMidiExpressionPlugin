@@ -88,8 +88,7 @@ void PluginProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    previousThru = *parameters.getRawParameterValue ("thru");
 }
 
 void PluginProcessor::releaseResources()
@@ -128,7 +127,10 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int numSamples = buffer.getNumSamples();
+    
+    const float currentThru = *parameters.getRawParameterValue ("thru");
 
+    // I dislike this being here a bit
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, numSamples);
 
@@ -140,6 +142,17 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     
     // go atomic...?
     currentExpressionValue = 0.9*(currentExpressionValue + incomingLoudness);
+    
+    if (currentThru == previousThru)
+    {
+        //buffer.applyGain (currentGain);
+        if(currentThru == 0.0f) buffer.clear();
+    }
+    else
+    {
+        buffer.applyGainRamp (0, numSamples, previousThru, currentThru);
+        previousThru = currentThru;
+    }
 }
 
 int PluginProcessor::setMidiOutput(int index) {

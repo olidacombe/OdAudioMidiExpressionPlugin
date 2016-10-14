@@ -59,6 +59,7 @@ private:
     ScopedPointer<MidiOutWorker> midiOutWorker;
     AudioProcessorValueTreeState parameters;
     
+    float previousThru;
     float currentExpressionValue;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
