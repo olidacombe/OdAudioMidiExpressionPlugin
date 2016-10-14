@@ -27,7 +27,7 @@ to be sent - making that a worker thread.
 
 */
 
-class OdAudioMidiExpressionPluginAudioProcessor;
+class PluginProcessor;
 
 class MidiOutWorker : public Timer
 {

@@ -2,7 +2,7 @@
 
 
 //==============================================================================
-OdAudioMidiExpressionPluginAudioProcessorEditor::OdAudioMidiExpressionPluginAudioProcessorEditor (OdAudioMidiExpressionPluginAudioProcessor& p)
+PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
     addAndMakeVisible(midiOutputList);
@@ -15,13 +15,13 @@ OdAudioMidiExpressionPluginAudioProcessorEditor::OdAudioMidiExpressionPluginAudi
     setSize (400, 300);
 }
 
-OdAudioMidiExpressionPluginAudioProcessorEditor::~OdAudioMidiExpressionPluginAudioProcessorEditor()
+PluginProcessorEditor::~PluginProcessorEditor()
 {
     //midiOutput = nullptr;
 }
 
 //==============================================================================
-void OdAudioMidiExpressionPluginAudioProcessorEditor::paint (Graphics& g)
+void PluginProcessorEditor::paint (Graphics& g)
 {
     g.fillAll (Colours::white);
 
@@ -30,13 +30,13 @@ void OdAudioMidiExpressionPluginAudioProcessorEditor::paint (Graphics& g)
     g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
 }
 
-void OdAudioMidiExpressionPluginAudioProcessorEditor::resized()
+void PluginProcessorEditor::resized()
 {
     Rectangle<int> area(getLocalBounds());
     midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
 }
 
-void OdAudioMidiExpressionPluginAudioProcessorEditor::setMidiOutput(int index) {
+void PluginProcessorEditor::setMidiOutput(int index) {
     //midiOutput = MidiOutput::openDevice(index);
     //if(midiOutput != nullptr) {
     //    midiOutputList.setSelectedId(index + 1, dontSendNotification);
@@ -45,7 +45,7 @@ void OdAudioMidiExpressionPluginAudioProcessorEditor::setMidiOutput(int index) {
     midiOutputList.setSelectedId(processor.setMidiOutput(index));
 }
 
-void OdAudioMidiExpressionPluginAudioProcessorEditor::comboBoxChanged(ComboBox* box) {
+void PluginProcessorEditor::comboBoxChanged(ComboBox* box) {
     if(box == &midiOutputList) {
         setMidiOutput(midiOutputList.getSelectedItemIndex());
     }

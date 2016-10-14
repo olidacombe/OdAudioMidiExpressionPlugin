@@ -3,24 +3,45 @@
 
 
 //==============================================================================
-OdAudioMidiExpressionPluginAudioProcessor::OdAudioMidiExpressionPluginAudioProcessor()
+PluginProcessor::PluginProcessor()
 :   currentExpressionValue(0.0), parameters(*this, nullptr)
 {
+    parameters.createAndAddParameter ("thru", "Thru", String(),
+                                          NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
+                                          thruToText,    // value to text function
+                                          textToThru);   // text to value function
+    
     midiOutWorker = new MidiOutWorker(this);
 }
 
-OdAudioMidiExpressionPluginAudioProcessor::~OdAudioMidiExpressionPluginAudioProcessor()
+PluginProcessor::~PluginProcessor()
 {
     midiOutWorker = nullptr;
 }
 
+
+String PluginProcessor::thruToText (float value)
+{
+    return value < 0.5 ? "Normal" : "Inverted";
+}
+    
+float PluginProcessor::textToThru (const String& text)
+{
+    if (text == "Normal")    return 0.0f;
+    if (text == "Inverted")  return 1.0f;
+    return 0.0f;
+}
+    
+    
+
+
 //==============================================================================
-const String OdAudioMidiExpressionPluginAudioProcessor::getName() const
+const String PluginProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool OdAudioMidiExpressionPluginAudioProcessor::acceptsMidi() const
+bool PluginProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -29,7 +50,7 @@ bool OdAudioMidiExpressionPluginAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool OdAudioMidiExpressionPluginAudioProcessor::producesMidi() const
+bool PluginProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -38,50 +59,50 @@ bool OdAudioMidiExpressionPluginAudioProcessor::producesMidi() const
    #endif
 }
 
-double OdAudioMidiExpressionPluginAudioProcessor::getTailLengthSeconds() const
+double PluginProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int OdAudioMidiExpressionPluginAudioProcessor::getNumPrograms()
+int PluginProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int OdAudioMidiExpressionPluginAudioProcessor::getCurrentProgram()
+int PluginProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void OdAudioMidiExpressionPluginAudioProcessor::setCurrentProgram (int index)
+void PluginProcessor::setCurrentProgram (int index)
 {
 }
 
-const String OdAudioMidiExpressionPluginAudioProcessor::getProgramName (int index)
+const String PluginProcessor::getProgramName (int index)
 {
     return String();
 }
 
-void OdAudioMidiExpressionPluginAudioProcessor::changeProgramName (int index, const String& newName)
+void PluginProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void OdAudioMidiExpressionPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 }
 
-void OdAudioMidiExpressionPluginAudioProcessor::releaseResources()
+void PluginProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool OdAudioMidiExpressionPluginAudioProcessor::setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet)
+bool PluginProcessor::setPreferredBusArrangement (bool isInput, int bus, const AudioChannelSet& preferredSet)
 {
     // Reject any bus arrangements that are not compatible with your plugin
 
@@ -105,7 +126,7 @@ bool OdAudioMidiExpressionPluginAudioProcessor::setPreferredBusArrangement (bool
 }
 #endif
 
-void OdAudioMidiExpressionPluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     const int totalNumInputChannels  = getTotalNumInputChannels();
     const int totalNumOutputChannels = getTotalNumOutputChannels();
@@ -124,36 +145,36 @@ void OdAudioMidiExpressionPluginAudioProcessor::processBlock (AudioSampleBuffer&
     currentExpressionValue = 0.9*(currentExpressionValue + incomingLoudness);
 }
 
-int OdAudioMidiExpressionPluginAudioProcessor::setMidiOutput(int index) {
+int PluginProcessor::setMidiOutput(int index) {
     return midiOutWorker->setMidiOutput(index);
 }
 
 //==============================================================================
-bool OdAudioMidiExpressionPluginAudioProcessor::hasEditor() const
+bool PluginProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* OdAudioMidiExpressionPluginAudioProcessor::createEditor()
+AudioProcessorEditor* PluginProcessor::createEditor()
 {
-    return new OdAudioMidiExpressionPluginAudioProcessorEditor (*this);
+    return new PluginProcessorEditor (*this);
 }
 
 //==============================================================================
-void OdAudioMidiExpressionPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
+void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void OdAudioMidiExpressionPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
 }
 
-float OdAudioMidiExpressionPluginAudioProcessor::getExpressionValue() {
+float PluginProcessor::getExpressionValue() {
     return currentExpressionValue;
 }
 
@@ -161,5 +182,5 @@ float OdAudioMidiExpressionPluginAudioProcessor::getExpressionValue() {
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new OdAudioMidiExpressionPluginAudioProcessor();
+    return new PluginProcessor();
 }

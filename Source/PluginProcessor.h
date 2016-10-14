@@ -8,14 +8,14 @@
 //==============================================================================
 /**
 */
-class OdAudioMidiExpressionPluginAudioProcessor  : public AudioProcessor,
-                                                    public ExpressionValueSource
+class PluginProcessor  : public AudioProcessor,
+                        public ExpressionValueSource
 {
 public:
 
     //==============================================================================
-    OdAudioMidiExpressionPluginAudioProcessor();
-    ~OdAudioMidiExpressionPluginAudioProcessor();
+    PluginProcessor();
+    ~PluginProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -52,6 +52,10 @@ public:
     int setMidiOutput(int index);
     
     float getExpressionValue() override;
+    
+    static float textToThru (const String& text);
+    static String thruToText (float value);
+    
 
 private:
     //==============================================================================
@@ -60,7 +64,7 @@ private:
     
     float currentExpressionValue;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OdAudioMidiExpressionPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
 
 

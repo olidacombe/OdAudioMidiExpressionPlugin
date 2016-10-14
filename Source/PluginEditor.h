@@ -8,12 +8,12 @@
 //==============================================================================
 /**
 */
-class OdAudioMidiExpressionPluginAudioProcessorEditor  : public AudioProcessorEditor,
+class PluginProcessorEditor  : public AudioProcessorEditor,
                                                         private ComboBox::Listener
 {
 public:
-    OdAudioMidiExpressionPluginAudioProcessorEditor (OdAudioMidiExpressionPluginAudioProcessor&);
-    ~OdAudioMidiExpressionPluginAudioProcessorEditor();
+    PluginProcessorEditor (PluginProcessor&);
+    ~PluginProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -24,10 +24,10 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    OdAudioMidiExpressionPluginAudioProcessor& processor;
+    PluginProcessor& processor;
     ComboBox midiOutputList;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OdAudioMidiExpressionPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessorEditor)
 };
 
 
