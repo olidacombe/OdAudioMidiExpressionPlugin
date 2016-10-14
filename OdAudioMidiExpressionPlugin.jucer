@@ -28,8 +28,9 @@
     <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="OdAudioMidiExpressionPlugin"
-                       osxCompatibility="10.7 SDK"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="OdAudioMidiExpressionPlugin"/>
+                       osxCompatibility="10.10 SDK"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="OdAudioMidiExpressionPlugin"
+                       osxCompatibility="10.10 SDK"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../src/JUCE/modules"/>
