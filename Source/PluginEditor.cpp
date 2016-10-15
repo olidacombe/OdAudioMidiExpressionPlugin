@@ -64,7 +64,7 @@ void PluginProcessorEditor::comboBoxChanged(ComboBox* box) {
 void PluginProcessorEditor::updateAvailableMidiOutputList() {
     const StringArray midiOutputs(MidiOutput::getDevices());
     const int selectedOutput = processor.getMidiOutputIndex();
-    DBG(String("Selected Output: " + String(selectedOutput)));
+
     // quick and dirty way to address menu update while open
     if(midiOutputList.isPopupActive()) {
         midiOutputList.hidePopup();

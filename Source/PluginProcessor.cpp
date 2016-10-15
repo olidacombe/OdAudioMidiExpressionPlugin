@@ -101,7 +101,6 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     //setMidiOutput(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
         
     setMidiOutput(getMidiOutputName());
-    //DBG(String("preparetoplay ") + String(midiOutputIndex));
     sendChangeMessage();
     previousThru = *parameters.getRawParameterValue ("thru");
 }
@@ -183,9 +182,7 @@ int PluginProcessor::setMidiOutput(int index) {
 
 int PluginProcessor::setMidiOutput(const String& name) {
     const int outIndex = midiOutWorker->setMidiOutput(name);
-    //setMidiOutputName(outIndex);
     midiOutputIndex = outIndex;
-    DBG(String("Setting processor's internal midiOutputIndex: " + String(outIndex)));
     return outIndex;
 }
 
