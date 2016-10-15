@@ -86,10 +86,10 @@ const String& MidiOutWorker::getMidiOutputName() {
 
 
 
-MidiOutputList::MidiOutputList() : chosenOutput("")
+MidiOutputList::MidiOutputList()
 {
     currentOutputList = MidiOutput::getDevices();
-    startTimer(600);
+    startTimer(500);
 }
 
 MidiOutputList::~MidiOutputList() {}

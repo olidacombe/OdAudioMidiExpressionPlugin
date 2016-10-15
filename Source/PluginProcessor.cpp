@@ -4,7 +4,7 @@
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
-:   currentExpressionValue(0.0), parameters(*this, nullptr)
+:   currentExpressionValue(0.0), parameters(*this, nullptr), midiOutputIndex(0)
 {
     parameters.createAndAddParameter ("thru", "Thru", String(),
         NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
@@ -31,6 +31,7 @@ PluginProcessor::PluginProcessor()
     midiOutWorker = new MidiOutWorker(this);
     midiOutputList = new MidiOutputList();
     midiOutputList->addChangeListener(this);
+
 }
 
 PluginProcessor::~PluginProcessor()
@@ -98,7 +99,10 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // are we sure this runs before an editor is created?
     //setMidiOutput(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
-    
+        
+    setMidiOutput(getMidiOutputName());
+    //DBG(String("preparetoplay ") + String(midiOutputIndex));
+    sendChangeMessage();
     previousThru = *parameters.getRawParameterValue ("thru");
 }
 
@@ -168,23 +172,24 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
 
 int PluginProcessor::setMidiOutput(int index) {
     const int outIndex = midiOutWorker->setMidiOutput(index);
-    setMidiOutputName(outIndex);
-    return outIndex;
-}
-
-int PluginProcessor::setMidiOutput(const String& name) {
-    const int outIndex = midiOutWorker->setMidiOutput(name);
-    setMidiOutputName(outIndex);
-    return outIndex;
-}
-
-void PluginProcessor::setMidiOutputName(int outIndex) {
     String midiOutName("");
     if(outIndex != -1) {
         midiOutName = midiOutWorker->getMidiOutputName();
     }
     setMidiOutputName(midiOutName);
+    midiOutputIndex = outIndex;
+    return outIndex;
 }
+
+int PluginProcessor::setMidiOutput(const String& name) {
+    const int outIndex = midiOutWorker->setMidiOutput(name);
+    //setMidiOutputName(outIndex);
+    midiOutputIndex = outIndex;
+    DBG(String("Setting processor's internal midiOutputIndex: " + String(outIndex)));
+    return outIndex;
+}
+
+
 
 const String PluginProcessor::getMidiOutputName() {
     return(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
@@ -230,6 +235,9 @@ float PluginProcessor::getExpressionValue() {
     return currentExpressionValue;
 }
 
+const int PluginProcessor::getMidiOutputIndex() {
+    return midiOutputIndex;
+}
 
 void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
     if(src == midiOutputList) {

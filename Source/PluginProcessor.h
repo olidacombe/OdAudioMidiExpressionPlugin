@@ -57,8 +57,8 @@ public:
     int setMidiOutput(const String& name);
     const String getMidiOutputName();
     
-    
     float getExpressionValue() override;
+    const int getMidiOutputIndex();
     
 
 private:
@@ -70,8 +70,8 @@ private:
     float previousThru;
     float currentExpressionValue;
     
+    int midiOutputIndex;
     void setMidiOutputName(const String& name);
-    void setMidiOutputName(int outIndex);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

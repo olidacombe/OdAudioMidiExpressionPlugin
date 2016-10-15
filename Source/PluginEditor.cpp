@@ -13,7 +13,7 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     
     addAndMakeVisible(midiOutputList);
     midiOutputList.setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
-    updateAvailableMidiOutputList();
+    //updateAvailableMidiOutputList();
     midiOutputList.addListener(this);
     
     processor.addChangeListener(this);
@@ -63,12 +63,15 @@ void PluginProcessorEditor::comboBoxChanged(ComboBox* box) {
 
 void PluginProcessorEditor::updateAvailableMidiOutputList() {
     const StringArray midiOutputs(MidiOutput::getDevices());
+    const int selectedOutput = processor.getMidiOutputIndex();
+    DBG(String("Selected Output: " + String(selectedOutput)));
     // quick and dirty way to address menu update while open
     if(midiOutputList.isPopupActive()) {
         midiOutputList.hidePopup();
     }
     midiOutputList.clear(dontSendNotification);
     midiOutputList.addItemList(midiOutputs, 1);
+    midiOutputList.setSelectedId(selectedOutput + 1);
 }
 
 void PluginProcessorEditor::changeListenerCallback(ChangeBroadcaster* src) {

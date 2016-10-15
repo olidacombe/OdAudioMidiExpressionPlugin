@@ -36,8 +36,7 @@ public:
     void timerCallback() override;
 private:
     StringArray currentOutputList;
-    String chosenOutput;
-    
+
     bool hasOutputListChanged();
 };
 
