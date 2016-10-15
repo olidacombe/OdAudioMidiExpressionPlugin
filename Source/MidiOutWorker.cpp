@@ -49,7 +49,7 @@ int MidiOutWorker::setMidiOutput(int index) {
     stopTimer();
     midiOutput = nullptr;
 
-    if (MidiOutput::getDevices() [index].isNotEmpty())
+    if (index != -1 && MidiOutput::getDevices() [index].isNotEmpty())
     {
         midiOutput = MidiOutput::openDevice (index);
         jassert (midiOutput);
@@ -58,13 +58,58 @@ int MidiOutWorker::setMidiOutput(int index) {
         
         return index;
     } 
-    return 0;
+    return -1;
 }
 
+
 int MidiOutWorker::setMidiOutput(const String& midiOutName) {
-    return 0;
+    const StringArray midiOuts = MidiOutput::getDevices();
+    /*
+    const int indexOfRequestedOutput = midiOuts.indexOf(midiOutName);
+    if(indexOfRequestedOutput != -1) {
+        // setMidiOutput
+    }
+    return indexOfRequestedOutput;
+    */
+    return setMidiOutput(midiOuts.indexOf(midiOutName));
 }
 
 const String& MidiOutWorker::getMidiOutputName() {
     return midiOutput->getName();
+}
+
+
+
+
+
+MidiOutputList::MidiOutputList() : chosenOutput("")
+{
+    currentOutputList = MidiOutput::getDevices();
+    startTimer(600);
+}
+
+MidiOutputList::~MidiOutputList() {}
+
+void MidiOutputList::timerCallback() {
+    if(hasOutputListChanged()) {
+        // maybe midiOutWorker should be handled from here,
+        // with the results broadcast by change messages
+        
+        sendChangeMessage();
+    }
+}
+
+bool MidiOutputList::hasOutputListChanged() {
+    const StringArray oldOutputList = currentOutputList;
+    currentOutputList = MidiOutput::getDevices();
+    
+    if(oldOutputList.size() != currentOutputList.size()) return true;
+
+    
+    for (int i = 0; i < currentOutputList.size(); ++i)
+        if (currentOutputList[i] != oldOutputList[i])
+            return true;
+
+    return false;
+    
 }

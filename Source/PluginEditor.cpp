@@ -15,6 +15,8 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     midiOutputList.setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
     updateAvailableMidiOutputList();
     midiOutputList.addListener(this);
+    
+    processor.addChangeListener(this);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
@@ -22,6 +24,7 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
 
 PluginProcessorEditor::~PluginProcessorEditor()
 {
+    processor.removeChangeListener(this);
     //midiOutput = nullptr;
 }
 
@@ -42,6 +45,7 @@ void PluginProcessorEditor::resized()
     midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
 }
 
+
 void PluginProcessorEditor::setMidiOutput(int index) {
     //midiOutput = MidiOutput::openDevice(index);
     //if(midiOutput != nullptr) {
@@ -59,5 +63,11 @@ void PluginProcessorEditor::comboBoxChanged(ComboBox* box) {
 
 void PluginProcessorEditor::updateAvailableMidiOutputList() {
     const StringArray midiOutputs(MidiOutput::getDevices());
+    midiOutputList.clear(dontSendNotification);
     midiOutputList.addItemList(midiOutputs, 1);
+}
+
+void PluginProcessorEditor::changeListenerCallback(ChangeBroadcaster* src) {
+    updateAvailableMidiOutputList();
+    //midiOutputList.setSelectedId(processor.getMidiOutput() + 1);
 }

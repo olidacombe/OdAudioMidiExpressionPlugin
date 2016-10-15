@@ -13,7 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class ExpressionValueSource {
+class ExpressionValueSource
+{
 public:
     virtual ~ExpressionValueSource() {};
     virtual float getExpressionValue()=0;
@@ -26,6 +27,20 @@ and substitue an object which calculates (or just reads) the current "expression
 to be sent - making that a worker thread.
 
 */
+
+class MidiOutputList : public Timer, public ChangeBroadcaster
+{
+public:
+    MidiOutputList();
+    ~MidiOutputList();
+    void timerCallback() override;
+private:
+    StringArray currentOutputList;
+    String chosenOutput;
+    
+    bool hasOutputListChanged();
+};
+
 
 class PluginProcessor;
 

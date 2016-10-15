@@ -18,7 +18,8 @@ public:
 /**
 */
 class PluginProcessorEditor  : public AudioProcessorEditor,
-                                private ComboBox::Listener
+                                private ComboBox::Listener,
+                                public ChangeListener
 {
 public:
     PluginProcessorEditor (PluginProcessor&, AudioProcessorValueTreeState&);
@@ -31,6 +32,7 @@ public:
     void resized() override;
     void setMidiOutput(int index);
     void comboBoxChanged(ComboBox* box) override;
+    void changeListenerCallback(ChangeBroadcaster* src) override;
 
 private:
     // This reference is provided as a quick way for your editor to

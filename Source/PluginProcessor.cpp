@@ -29,10 +29,13 @@ PluginProcessor::PluginProcessor()
     parameters.state.addChild(midiParameters, -1, nullptr);
                                           
     midiOutWorker = new MidiOutWorker(this);
+    midiOutputList = new MidiOutputList();
+    midiOutputList->addChangeListener(this);
 }
 
 PluginProcessor::~PluginProcessor()
 {
+    midiOutputList = nullptr;
     midiOutWorker = nullptr;
 }
 
@@ -93,6 +96,9 @@ void PluginProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // are we sure this runs before an editor is created?
+    //setMidiOutput(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
+    
     previousThru = *parameters.getRawParameterValue ("thru");
 }
 
@@ -163,12 +169,21 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
 int PluginProcessor::setMidiOutput(int index) {
     const int outIndex = midiOutWorker->setMidiOutput(index);
     
+    String midiOutName("");
     if(outIndex != 0) {
-        const String midiOutName = midiOutWorker->getMidiOutputName();
-        parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", midiOutName, nullptr);
+        midiOutName = midiOutWorker->getMidiOutputName();
     }
+    setMidiOutputName(midiOutName);
     
     return outIndex;
+}
+
+const String PluginProcessor::getMidiOutputName() {
+    return(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
+}
+
+void PluginProcessor::setMidiOutputName(const String& name) {
+    parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
 }
 
 //==============================================================================
@@ -185,10 +200,11 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-    parameters.state.setProperty("lovely", "bacon", nullptr);
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
+    #if JUCE_DEBUG
     const File xmlDebugDump ("/Users/oli/lol.xml");
     xml->writeToFile(xmlDebugDump, "");
+    #endif
     copyXmlToBinary (*xml, destData);
 }
 
@@ -205,6 +221,14 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 float PluginProcessor::getExpressionValue() {
     return currentExpressionValue;
 }
+
+
+void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
+    
+    
+    sendChangeMessage();
+}
+
 
 //==============================================================================
 // This creates new instances of the plugin..

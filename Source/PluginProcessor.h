@@ -9,7 +9,9 @@
 /**
 */
 class PluginProcessor  : public AudioProcessor,
-                        public ExpressionValueSource
+                        public ExpressionValueSource,
+                        public ChangeBroadcaster,
+                        public ChangeListener
 {
 public:
 
@@ -49,7 +51,11 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    void changeListenerCallback(ChangeBroadcaster* src) override;
+    
     int setMidiOutput(int index);
+    const String getMidiOutputName();
+    
     
     float getExpressionValue() override;
     
@@ -57,10 +63,13 @@ public:
 private:
     //==============================================================================
     ScopedPointer<MidiOutWorker> midiOutWorker;
+    ScopedPointer<MidiOutputList> midiOutputList;
     AudioProcessorValueTreeState parameters;
     
     float previousThru;
     float currentExpressionValue;
+    
+    void setMidiOutputName(const String& name);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
