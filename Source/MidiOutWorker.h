@@ -53,6 +53,7 @@ public:
     int setMidiOutput(int index);
     int setMidiOutput(const String& midiOutName);
     const String& getMidiOutputName();
+    void stop();
 private:
     void sendMessage();
     int lastOutputCCValue, currentOutputCCValue;

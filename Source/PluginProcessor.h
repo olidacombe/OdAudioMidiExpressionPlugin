@@ -54,6 +54,7 @@ public:
     void changeListenerCallback(ChangeBroadcaster* src) override;
     
     int setMidiOutput(int index);
+    int setMidiOutput(const String& name);
     const String getMidiOutputName();
     
     
@@ -70,6 +71,7 @@ private:
     float currentExpressionValue;
     
     void setMidiOutputName(const String& name);
+    void setMidiOutputName(int outIndex);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

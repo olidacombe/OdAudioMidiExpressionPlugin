@@ -168,14 +168,22 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
 
 int PluginProcessor::setMidiOutput(int index) {
     const int outIndex = midiOutWorker->setMidiOutput(index);
-    
+    setMidiOutputName(outIndex);
+    return outIndex;
+}
+
+int PluginProcessor::setMidiOutput(const String& name) {
+    const int outIndex = midiOutWorker->setMidiOutput(name);
+    setMidiOutputName(outIndex);
+    return outIndex;
+}
+
+void PluginProcessor::setMidiOutputName(int outIndex) {
     String midiOutName("");
-    if(outIndex != 0) {
+    if(outIndex != -1) {
         midiOutName = midiOutWorker->getMidiOutputName();
     }
     setMidiOutputName(midiOutName);
-    
-    return outIndex;
 }
 
 const String PluginProcessor::getMidiOutputName() {
@@ -224,9 +232,13 @@ float PluginProcessor::getExpressionValue() {
 
 
 void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
-    
-    
-    sendChangeMessage();
+    if(src == midiOutputList) {
+        midiOutWorker->stop();
+        
+        setMidiOutput(getMidiOutputName());
+        
+        sendChangeMessage();
+    }
 }
 
 

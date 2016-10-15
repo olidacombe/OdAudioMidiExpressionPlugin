@@ -63,6 +63,10 @@ void PluginProcessorEditor::comboBoxChanged(ComboBox* box) {
 
 void PluginProcessorEditor::updateAvailableMidiOutputList() {
     const StringArray midiOutputs(MidiOutput::getDevices());
+    // quick and dirty way to address menu update while open
+    if(midiOutputList.isPopupActive()) {
+        midiOutputList.hidePopup();
+    }
     midiOutputList.clear(dontSendNotification);
     midiOutputList.addItemList(midiOutputs, 1);
 }

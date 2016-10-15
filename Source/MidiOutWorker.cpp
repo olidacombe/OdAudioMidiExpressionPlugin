@@ -74,6 +74,10 @@ int MidiOutWorker::setMidiOutput(const String& midiOutName) {
     return setMidiOutput(midiOuts.indexOf(midiOutName));
 }
 
+void MidiOutWorker::stop() {
+    stopTimer();
+}
+
 const String& MidiOutWorker::getMidiOutputName() {
     return midiOutput->getName();
 }
