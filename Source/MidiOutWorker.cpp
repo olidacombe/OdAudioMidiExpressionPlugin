@@ -53,15 +53,18 @@ int MidiOutWorker::setMidiOutput(int index) {
     {
         midiOutput = MidiOutput::openDevice (index);
         jassert (midiOutput);
-        /*
-        MidiMessage message = MidiMessage::controllerEvent(1, 20, 99);
-        DBG("sending message");
-        midiOutput->sendMessageNow(message);
-        */
         
         startTimer(30);
         
-        return index+1; // appropriate for ComboBox
+        return index;
     } 
     return 0;
+}
+
+int MidiOutWorker::setMidiOutput(const String& midiOutName) {
+    return 0;
+}
+
+const String& MidiOutWorker::getMidiOutputName() {
+    return midiOutput->getName();
 }

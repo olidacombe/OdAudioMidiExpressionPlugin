@@ -4,12 +4,21 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
+/*
+class UpdateOnFocusComboBox : public ComboBox
+{
+public:
+    void focusGained(Component::FocusChangeType fct) {
+        
+    }
+}
+*/
 
 //==============================================================================
 /**
 */
 class PluginProcessorEditor  : public AudioProcessorEditor,
-                                                        private ComboBox::Listener
+                                private ComboBox::Listener
 {
 public:
     PluginProcessorEditor (PluginProcessor&, AudioProcessorValueTreeState&);
@@ -34,6 +43,8 @@ private:
     
     ComboBox midiOutputList;
 
+    void updateAvailableMidiOutputList();
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessorEditor)
 };
 

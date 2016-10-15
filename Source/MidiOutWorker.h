@@ -36,6 +36,8 @@ public:
     ~MidiOutWorker();
     void timerCallback() override;
     int setMidiOutput(int index);
+    int setMidiOutput(const String& midiOutName);
+    const String& getMidiOutputName();
 private:
     void sendMessage();
     int lastOutputCCValue, currentOutputCCValue;

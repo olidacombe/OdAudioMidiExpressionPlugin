@@ -4,9 +4,9 @@
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
-:   currentExpressionValue(0.0), parameters(*this, nullptr)
+:   currentExpressionValue(0.0), audioParameters(*this, nullptr)
 {
-    parameters.createAndAddParameter ("thru", "Thru", String(),
+    audioParameters.createAndAddParameter ("thru", "Thru", String(),
         NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
         [](float value)
         {
@@ -21,7 +21,7 @@ PluginProcessor::PluginProcessor()
           return 0.0f;
     });
     
-    parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
+    audioParameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
                                           
     midiOutWorker = new MidiOutWorker(this);
 }
@@ -88,7 +88,7 @@ void PluginProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    previousThru = *parameters.getRawParameterValue ("thru");
+    previousThru = *audioParameters.getRawParameterValue ("thru");
 }
 
 void PluginProcessor::releaseResources()
@@ -128,7 +128,7 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int numSamples = buffer.getNumSamples();
     
-    const float currentThru = *parameters.getRawParameterValue ("thru");
+    const float currentThru = *audioParameters.getRawParameterValue ("thru");
 
     // I dislike this being here a bit
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
@@ -156,7 +156,13 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
 }
 
 int PluginProcessor::setMidiOutput(int index) {
-    return midiOutWorker->setMidiOutput(index);
+    const int outIndex = midiOutWorker->setMidiOutput(index);
+    
+    if(outIndex != 0) {
+        const String midiOutName = midiOutWorker->getMidiOutputName();
+    }
+    
+    return outIndex;
 }
 
 //==============================================================================
@@ -167,13 +173,13 @@ bool PluginProcessor::hasEditor() const
 
 AudioProcessorEditor* PluginProcessor::createEditor()
 {
-    return new PluginProcessorEditor (*this, parameters);
+    return new PluginProcessorEditor (*this, audioParameters);
 }
 
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-    ScopedPointer<XmlElement> xml (parameters.state.createXml());
+    ScopedPointer<XmlElement> xml (audioParameters.state.createXml());
     copyXmlToBinary (*xml, destData);
 }
 
@@ -182,8 +188,8 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
         
     if (xmlState != nullptr)
-        if (xmlState->hasTagName (parameters.state.getType()))
-            parameters.state = ValueTree::fromXml (*xmlState);
+        if (xmlState->hasTagName (audioParameters.state.getType()))
+            audioParameters.state = ValueTree::fromXml (*xmlState);
 }
 
 float PluginProcessor::getExpressionValue() {

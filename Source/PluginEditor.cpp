@@ -13,8 +13,7 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     
     addAndMakeVisible(midiOutputList);
     midiOutputList.setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
-    const StringArray midiOutputs(MidiOutput::getDevices());
-    midiOutputList.addItemList(midiOutputs, 1);
+    updateAvailableMidiOutputList();
     midiOutputList.addListener(this);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -49,11 +48,16 @@ void PluginProcessorEditor::setMidiOutput(int index) {
     //    midiOutputList.setSelectedId(index + 1, dontSendNotification);
     //    processor.setMidiOutput(index);
     //}
-    midiOutputList.setSelectedId(processor.setMidiOutput(index));
+    midiOutputList.setSelectedId(processor.setMidiOutput(index) + 1);
 }
 
 void PluginProcessorEditor::comboBoxChanged(ComboBox* box) {
     if(box == &midiOutputList) {
         setMidiOutput(midiOutputList.getSelectedItemIndex());
     }
+}
+
+void PluginProcessorEditor::updateAvailableMidiOutputList() {
+    const StringArray midiOutputs(MidiOutput::getDevices());
+    midiOutputList.addItemList(midiOutputs, 1);
 }
