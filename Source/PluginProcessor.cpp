@@ -4,9 +4,9 @@
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
-:   currentExpressionValue(0.0), audioParameters(*this, nullptr)
+:   currentExpressionValue(0.0), parameters(*this, nullptr)
 {
-    audioParameters.createAndAddParameter ("thru", "Thru", String(),
+    parameters.createAndAddParameter ("thru", "Thru", String(),
         NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
         [](float value)
         {
@@ -21,7 +21,12 @@ PluginProcessor::PluginProcessor()
           return 0.0f;
     });
     
-    audioParameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
+    parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
+    ValueTree midiParameters (Identifier("MidiParameters"));
+    ValueTree midiOutputParameter (Identifier("Output"));
+    midiOutputParameter.setProperty("name", "", nullptr);
+    midiParameters.addChild(midiOutputParameter, -1, nullptr);
+    parameters.state.addChild(midiParameters, -1, nullptr);
                                           
     midiOutWorker = new MidiOutWorker(this);
 }
@@ -88,7 +93,7 @@ void PluginProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    previousThru = *audioParameters.getRawParameterValue ("thru");
+    previousThru = *parameters.getRawParameterValue ("thru");
 }
 
 void PluginProcessor::releaseResources()
@@ -128,7 +133,7 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     const int totalNumOutputChannels = getTotalNumOutputChannels();
     const int numSamples = buffer.getNumSamples();
     
-    const float currentThru = *audioParameters.getRawParameterValue ("thru");
+    const float currentThru = *parameters.getRawParameterValue ("thru");
 
     // I dislike this being here a bit
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
@@ -160,6 +165,7 @@ int PluginProcessor::setMidiOutput(int index) {
     
     if(outIndex != 0) {
         const String midiOutName = midiOutWorker->getMidiOutputName();
+        parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", midiOutName, nullptr);
     }
     
     return outIndex;
@@ -173,23 +179,27 @@ bool PluginProcessor::hasEditor() const
 
 AudioProcessorEditor* PluginProcessor::createEditor()
 {
-    return new PluginProcessorEditor (*this, audioParameters);
+    return new PluginProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-    ScopedPointer<XmlElement> xml (audioParameters.state.createXml());
+    parameters.state.setProperty("lovely", "bacon", nullptr);
+    ScopedPointer<XmlElement> xml (parameters.state.createXml());
+    const File xmlDebugDump ("/Users/oli/lol.xml");
+    xml->writeToFile(xmlDebugDump, "");
     copyXmlToBinary (*xml, destData);
 }
 
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    // return; // schema changes can appear not to happen when this function recalls
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
         
     if (xmlState != nullptr)
-        if (xmlState->hasTagName (audioParameters.state.getType()))
-            audioParameters.state = ValueTree::fromXml (*xmlState);
+        if (xmlState->hasTagName (parameters.state.getType()))
+            parameters.state = ValueTree::fromXml (*xmlState);
 }
 
 float PluginProcessor::getExpressionValue() {
