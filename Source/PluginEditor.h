@@ -26,6 +26,7 @@ public:
     ~PluginProcessorEditor();
     
     typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -39,6 +40,10 @@ private:
     // access the processor object that created it.
     PluginProcessor& processor;
     AudioProcessorValueTreeState& valueTreeState;
+    
+    Label decayLabel;
+    Slider decaySlider;
+    ScopedPointer<SliderAttachment> decayAttachment;
     
     ToggleButton thruButton;
     ScopedPointer<ButtonAttachment> thruAttachment;

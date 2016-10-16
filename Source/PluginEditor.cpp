@@ -5,6 +5,11 @@
 PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
+    decayLabel.setText("Decay", dontSendNotification);
+    addAndMakeVisible(decayLabel);
+    decaySlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    addAndMakeVisible(decaySlider);
+    decayAttachment = new SliderAttachment (valueTreeState, "decay", decaySlider);
     
     thruButton.setButtonText ("Thru");
     addAndMakeVisible (thruButton);
@@ -50,6 +55,9 @@ void PluginProcessorEditor::resized()
     activeButton.setBounds(topBar.removeFromLeft(70));
     //midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
     midiOutputList.setBounds(topBar.removeFromRight(150).reduced(8));
+    Rectangle<int> decayBox = area.removeFromTop(50);
+    decaySlider.setBounds(decayBox.removeFromLeft(100));
+    decayLabel.setBounds(decayBox.removeFromLeft(50));
 }
 
 

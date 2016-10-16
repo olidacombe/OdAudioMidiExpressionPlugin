@@ -36,6 +36,10 @@ PluginProcessor::PluginProcessor()
         }
     );
     
+    parameters.createAndAddParameter("decay", "Decay", String(),
+        NormalisableRange<float>(0.0f, 0.99f), 0.75f,
+        nullptr, nullptr);
+    
     parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
     ValueTree midiParameters (Identifier("MidiParameters"));
     ValueTree midiOutputParameter (Identifier("Output"));
@@ -162,6 +166,7 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     const int numSamples = buffer.getNumSamples();
     
     const float currentThru = *parameters.getRawParameterValue ("thru");
+    const float decayParam = *parameters.getRawParameterValue("decay");
 
     // I dislike this being here a bit
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
@@ -174,7 +179,7 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     }
     
     // go atomic...?
-    currentExpressionValue = 0.9*(currentExpressionValue + incomingLoudness);
+    currentExpressionValue = decayParam * (currentExpressionValue + incomingLoudness);
     
     if (currentThru == previousThru)
     {
