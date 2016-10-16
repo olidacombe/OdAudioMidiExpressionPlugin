@@ -10,6 +10,10 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     addAndMakeVisible (thruButton);
     thruAttachment = new ButtonAttachment (valueTreeState, "thru", thruButton);
     
+    activeButton.setButtonText("Active");
+    addAndMakeVisible(activeButton);
+    activeAttachment = new ButtonAttachment (valueTreeState, "active", activeButton);
+    
     
     addAndMakeVisible(midiOutputList);
     midiOutputList.setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
@@ -31,18 +35,21 @@ PluginProcessorEditor::~PluginProcessorEditor()
 //==============================================================================
 void PluginProcessorEditor::paint (Graphics& g)
 {
-    g.fillAll (Colours::white);
+    g.fillAll (Colours::grey);
 
-    g.setColour (Colours::black);
+    g.setColour (Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
+    //g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
 }
 
 void PluginProcessorEditor::resized()
 {
     Rectangle<int> area(getLocalBounds());
-    thruButton.setBounds(area.removeFromTop(20));
-    midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
+    Rectangle<int> topBar = area.removeFromTop(36);
+    thruButton.setBounds(topBar.removeFromLeft(70));
+    activeButton.setBounds(topBar.removeFromLeft(70));
+    //midiOutputList.setBounds (area.removeFromTop (36).removeFromRight (getWidth() - 150).reduced (8));
+    midiOutputList.setBounds(topBar.removeFromRight(150).reduced(8));
 }
 
 

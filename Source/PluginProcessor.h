@@ -70,6 +70,8 @@ private:
     float previousThru;
     float currentExpressionValue;
     
+    bool active;
+    
     int midiOutputIndex;
     void setMidiOutputName(const String& name);
     

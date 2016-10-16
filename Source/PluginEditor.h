@@ -43,6 +43,9 @@ private:
     ToggleButton thruButton;
     ScopedPointer<ButtonAttachment> thruAttachment;
     
+    ToggleButton activeButton;
+    ScopedPointer<ButtonAttachment> activeAttachment;
+    
     ComboBox midiOutputList;
 
     void updateAvailableMidiOutputList();

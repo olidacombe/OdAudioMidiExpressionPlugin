@@ -19,7 +19,22 @@ PluginProcessor::PluginProcessor()
           if (text == "Mute")    return 0.0f;
           if (text == "Thru")  return 1.0f;
           return 0.0f;
-    });
+        }
+    );
+    
+    parameters.createAndAddParameter("active", "Active", String(),
+        NormalisableRange<float> (0.0f, 1.0f, 1.0f), 1.0f,
+        [](float value)
+        {
+            return value > 0.5 ? "Active" : "Inactive";
+        },
+        [](const String& text)
+        {
+            if(text == "Active") return 1.0f;
+            if(text == "Thru") return 0.0f;
+            return 0.0f;
+        }
+    );
     
     parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
     ValueTree midiParameters (Identifier("MidiParameters"));
@@ -103,6 +118,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     setMidiOutput(getMidiOutputName());
     sendChangeMessage();
     previousThru = *parameters.getRawParameterValue ("thru");
+    active = (*parameters.getRawParameterValue("active") == 1.0f);
 }
 
 void PluginProcessor::releaseResources()
