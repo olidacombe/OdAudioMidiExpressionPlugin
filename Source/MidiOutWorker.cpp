@@ -29,7 +29,8 @@ MidiOutWorker::~MidiOutWorker()
 }
 
 void MidiOutWorker::timerCallback()
-{    
+{
+    if(!evs->isActive()) return;
     float expression = evs->getExpressionValue();    
     currentOutputCCValue = jmin(127.0 * expression, 127.0);
     if(currentOutputCCValue != lastOutputCCValue) {

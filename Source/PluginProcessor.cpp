@@ -118,7 +118,10 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     setMidiOutput(getMidiOutputName());
     sendChangeMessage();
     previousThru = *parameters.getRawParameterValue ("thru");
-    active = (*parameters.getRawParameterValue("active") == 1.0f);
+}
+
+const bool PluginProcessor::isActive() {
+    return (*parameters.getRawParameterValue("active") == 1.0f);
 }
 
 void PluginProcessor::releaseResources()

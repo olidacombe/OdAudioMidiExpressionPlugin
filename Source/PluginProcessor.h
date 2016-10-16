@@ -59,6 +59,7 @@ public:
     
     float getExpressionValue() override;
     const int getMidiOutputIndex();
+    const bool isActive() override;
     
 
 private:
@@ -69,8 +70,6 @@ private:
     
     float previousThru;
     float currentExpressionValue;
-    
-    bool active;
     
     int midiOutputIndex;
     void setMidiOutputName(const String& name);

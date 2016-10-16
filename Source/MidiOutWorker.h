@@ -18,6 +18,7 @@ class ExpressionValueSource
 public:
     virtual ~ExpressionValueSource() {};
     virtual float getExpressionValue()=0;
+    virtual const bool isActive()=0;
 };
 
 /*
