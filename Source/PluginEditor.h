@@ -4,19 +4,15 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
-/*
-class UpdateOnFocusComboBox : public ComboBox
+class MidiOutputComboBox : public ComboBox
 {
 public:
-    void focusGained(Component::FocusChangeType fct) {
-        
-    }
-}
-*/
+    MidiOutputComboBox(MidiOutputList& mol) : midiOutputList(mol)
+    {}
+private:
+    MidiOutputList& midiOutputList;
+};
 
-//==============================================================================
-/**
-*/
 class PluginProcessorEditor  : public AudioProcessorEditor,
                                 private ComboBox::Listener,
                                 public ChangeListener
