@@ -236,8 +236,10 @@ void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
     #if JUCE_DEBUG
+    #if JUCE_OSX
     const File xmlDebugDump ("/Users/oli/lol.xml");
     xml->writeToFile(xmlDebugDump, "");
+    #endif
     #endif
     copyXmlToBinary (*xml, destData);
 }

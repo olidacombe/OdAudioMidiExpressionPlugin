@@ -49,6 +49,30 @@
         <MODULEPATH id="juce_audio_plugin_client" path="../../src/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <VS2015 targetFolder="Builds/VisualStudio2015" vst3Folder="g:\SDKs\VST3 SDK">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="OdAudioMidiExpressionPlugin"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="OdAudioMidiExpressionPlugin"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_opengl" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_cryptography" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\src\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\src\JUCE\modules"/>
+      </MODULEPATHS>
+    </VS2015>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
