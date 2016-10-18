@@ -37,8 +37,10 @@ public:
     virtual ~Audio2MidiComponent()=0;
     virtual void paint(Graphics&) override;
 
+protected:
+    LevelMeter levelMeter;
+
 private:
-    ScopedPointer<LevelMeter> levelMeter;
     ScopedPointer<MidiOutputComboBox> midiOutputComboBox;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Audio2MidiComponent)

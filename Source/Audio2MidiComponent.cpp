@@ -46,6 +46,10 @@ void Audio2MidiComponent::paint (Graphics& g)
                 Justification::centred, true);   // draw some placeholder text
 }
 
+LoudnessDecayComponent::LoudnessDecayComponent() {
+    addAndMakeVisible(levelMeter);
+}
+
 void LoudnessDecayComponent::paint (Graphics& g)
 {
     /* This demo code just fills the component's background and
@@ -55,10 +59,10 @@ void LoudnessDecayComponent::paint (Graphics& g)
        drawing code..
     */
 
-    g.fillAll (Colours::white);   // clear the background
+    g.fillAll (Colours::black);   // clear the background
 
-    g.setColour (Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    //g.setColour (Colours::orange);
+    //g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (Colours::lightblue);
     g.setFont (14.0f);
@@ -70,5 +74,8 @@ void LoudnessDecayComponent::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
+    
+    Rectangle<int> area = getBounds();
+    levelMeter.setBounds(area.removeFromRight(14).reduced(2));
 
 }

@@ -3,7 +3,7 @@
 
 LevelMeter::LevelMeter ()
 {
-
+    
     setSize (20, 100);
 
 }
@@ -18,6 +18,9 @@ void LevelMeter::paint (Graphics& g)
 {
 
     g.fillAll (Colours::black);
+    g.setColour(Colours::yellow);
+    Rectangle<int> area = getBounds();
+    g.drawRect(area.removeFromBottom(getHeight() * 0.7));
 
 }
 

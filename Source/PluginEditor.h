@@ -3,6 +3,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "Audio2MidiComponent.h"
 
 class PluginProcessorEditor  : public AudioProcessorEditor,
                                 private ComboBox::Listener,
