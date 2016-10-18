@@ -4,7 +4,7 @@
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
-:   currentExpressionValue(0.0), parameters(*this, nullptr), midiOutputIndex(0)
+:   parameters(*this, nullptr), currentExpressionValue(0.0), midiOutputIndex(0)
 {
     parameters.createAndAddParameter ("thru", "Thru", String(),
         NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
@@ -47,9 +47,9 @@ PluginProcessor::PluginProcessor()
     midiParameters.addChild(midiOutputParameter, -1, nullptr);
     parameters.state.addChild(midiParameters, -1, nullptr);
                                           
-    midiOutWorker = new MidiOutWorker(this);
     midiOutputList = new MidiOutputList();
     midiOutputList->addChangeListener(this);
+    midiOutWorker = new MidiOutWorker(this, midiOutputList);
 
 }
 

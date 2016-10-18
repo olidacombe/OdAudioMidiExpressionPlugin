@@ -12,14 +12,9 @@
 #define MIDIOUTWORKER_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "ExpressionValueMachine.h"
 
-class ExpressionValueSource
-{
-public:
-    virtual ~ExpressionValueSource() {};
-    virtual float getExpressionValue()=0;
-    virtual const bool isActive()=0;
-};
+
 
 /*
 
@@ -47,7 +42,7 @@ class PluginProcessor;
 class MidiOutWorker : public Timer
 {
 public:
-    MidiOutWorker(ExpressionValueSource* e);
+    MidiOutWorker(ExpressionValueSource*, MidiOutputList*);
     ~MidiOutWorker();
     void timerCallback() override;
     int setMidiOutput(int index);
@@ -59,6 +54,7 @@ private:
     int lastOutputCCValue, currentOutputCCValue;
     ExpressionValueSource *evs;
     ScopedPointer<MidiOutput> midiOutput;
+    MidiOutputList *midiOutputList;
 };
 
 

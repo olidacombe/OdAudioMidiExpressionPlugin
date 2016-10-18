@@ -4,15 +4,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
-class MidiOutputComboBox : public ComboBox
-{
-public:
-    MidiOutputComboBox(MidiOutputList& mol) : midiOutputList(mol)
-    {}
-private:
-    MidiOutputList& midiOutputList;
-};
-
 class PluginProcessorEditor  : public AudioProcessorEditor,
                                 private ComboBox::Listener,
                                 public ChangeListener

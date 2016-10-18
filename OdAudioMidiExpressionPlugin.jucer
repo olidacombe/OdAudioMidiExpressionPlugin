@@ -12,6 +12,14 @@
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.4">
   <MAINGROUP id="ZprtxY" name="OdAudioMidiExpressionPlugin">
     <GROUP id="{6D9671D0-4E10-D6D2-D21E-D379EA550EA5}" name="Source">
+      <FILE id="SWeV9d" name="ExpressionValueMachine.cpp" compile="1" resource="0"
+            file="Source/ExpressionValueMachine.cpp"/>
+      <FILE id="CZxPaU" name="ExpressionValueMachine.h" compile="0" resource="0"
+            file="Source/ExpressionValueMachine.h"/>
+      <FILE id="SnqvDg" name="Audio2MidiComponent.cpp" compile="1" resource="0"
+            file="Source/Audio2MidiComponent.cpp"/>
+      <FILE id="CLOpuR" name="Audio2MidiComponent.h" compile="0" resource="0"
+            file="Source/Audio2MidiComponent.h"/>
       <FILE id="X70dlC" name="LevelMeter.cpp" compile="1" resource="0" file="Source/LevelMeter.cpp"/>
       <FILE id="mlPFhS" name="LevelMeter.h" compile="0" resource="0" file="Source/LevelMeter.h"/>
       <FILE id="ncI2gl" name="MidiOutWorker.cpp" compile="1" resource="0"

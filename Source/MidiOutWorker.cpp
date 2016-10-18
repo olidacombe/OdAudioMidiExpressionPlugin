@@ -13,11 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-MidiOutWorker::MidiOutWorker(ExpressionValueSource* e)
-:
-    //Thread("Midi Output Worker"),
-    evs(e),
-    lastOutputCCValue(0), currentOutputCCValue(0)
+MidiOutWorker::MidiOutWorker(ExpressionValueSource* e, MidiOutputList* mol)
+: lastOutputCCValue(0), currentOutputCCValue(0), evs(e), midiOutputList(mol)
 {
 
 }
