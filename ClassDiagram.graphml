@@ -146,7 +146,7 @@
       <data key="d4"/>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="143.0" width="190.0" x="-423.4978292718986" y="241.6688396349415"/>
+          <y:Geometry height="143.0" width="190.0" x="-523.7970470033197" y="208.38168187744475"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.310546875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.947265625" x="56.5263671875" y="3.0">LevelMeter<y:LabelModel>
