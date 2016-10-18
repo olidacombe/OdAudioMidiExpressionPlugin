@@ -254,7 +254,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             parameters.state = ValueTree::fromXml (*xmlState);
 }
 
-float PluginProcessor::getExpressionValue() {
+const float PluginProcessor::getExpressionValue() {
     return currentExpressionValue;
 }
 

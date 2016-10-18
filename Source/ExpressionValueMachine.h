@@ -17,7 +17,7 @@ class ExpressionValueSource
 {
 public:
     virtual ~ExpressionValueSource() {};
-    virtual float getExpressionValue()=0;
+    virtual const float getExpressionValue()=0;
     virtual const bool isActive()=0;
 };
 
@@ -26,17 +26,22 @@ class ExpressionValueMachine : public ExpressionValueSource
 public:
     ExpressionValueMachine();
     virtual ~ExpressionValueMachine()=0;
+    virtual void pushSample(const float& sample)=0;
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ExpressionValueMachine)
 };
 
 
-class LoudnessDecayValueMachine : public ExpressionValueSource
+class LoudnessDecayValueMachine : public ExpressionValueMachine
 {
 public:
     LoudnessDecayValueMachine();
     ~LoudnessDecayValueMachine();
+    void pushSample(const float& sample) override;
+    const float getExpressionValue() override;
 private:
+    float decayParam;
+    float currentExpressionValue;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LoudnessDecayValueMachine)
 };
 

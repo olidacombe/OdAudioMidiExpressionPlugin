@@ -57,7 +57,7 @@ public:
     int setMidiOutput(const String& name);
     const String getMidiOutputName();
     
-    float getExpressionValue() override;
+    const float getExpressionValue() override;
     const int getMidiOutputIndex();
     const bool isActive() override;
     
