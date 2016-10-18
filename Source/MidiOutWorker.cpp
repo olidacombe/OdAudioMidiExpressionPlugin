@@ -59,7 +59,9 @@ int MidiOutWorker::setMidiOutput(int index) {
     return -1;
 }
 
-
+// change this to not call MidiOutput::getDevices and try directly
+// from what is held in midiOutput object.  We'll be re-run when that
+// detects a change anyhow.
 int MidiOutWorker::setMidiOutput(const String& midiOutName) {
     const StringArray midiOuts = MidiOutput::getDevices();
     /*
@@ -81,6 +83,11 @@ const String& MidiOutWorker::getMidiOutputName() {
 }
 
 
+// use this for alert from MidiOutputList that devices have changed, and pass up to 
+// own MidiOutputComboBox via sendChangeMessage()
+void MidiOutWorker::changeListenerCallback(ChangeBroadcaster* cb) {
+    
+}
 
 
 

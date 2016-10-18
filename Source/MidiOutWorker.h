@@ -39,7 +39,7 @@ private:
 
 class PluginProcessor;
 
-class MidiOutWorker : public Timer
+class MidiOutWorker : public Timer, public ChangeListener, private ChangeBroadcaster
 {
 public:
     MidiOutWorker(ExpressionValueSource*, MidiOutputList*);
@@ -49,6 +49,7 @@ public:
     int setMidiOutput(const String& midiOutName);
     const String& getMidiOutputName();
     void stop();
+    void changeListenerCallback(ChangeBroadcaster *) override;
 private:
     void sendMessage();
     int lastOutputCCValue, currentOutputCCValue;
