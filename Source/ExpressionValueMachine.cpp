@@ -29,3 +29,8 @@ const float LoudnessDecayValueMachine::getExpressionValue()
 {
     return currentExpressionValue;
 }
+
+const bool LoudnessDecayValueMachine::isActive()
+{
+    return true; // not sure why we need this function at the moment
+}

@@ -39,6 +39,7 @@ public:
     ~LoudnessDecayValueMachine();
     void pushSample(const float& sample) override;
     const float getExpressionValue() override;
+    const bool isActive() override;
 private:
     float decayParam;
     float currentExpressionValue;
