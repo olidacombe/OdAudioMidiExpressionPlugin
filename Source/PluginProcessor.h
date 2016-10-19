@@ -84,6 +84,8 @@ public:
     const int getMidiOutputIndex();
     const bool isActive() override;
     
+    void addMachine(const String& typeName);
+    
 
 private:
     //==============================================================================

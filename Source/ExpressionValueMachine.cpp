@@ -10,10 +10,9 @@
 
 #include "ExpressionValueMachine.h"
 
-
-LoudnessDecayValueMachine::LoudnessDecayValueMachine() : decayParam(0.5), currentExpressionValue(0)
+LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState *p) : ExpressionValueMachine(p), decayParam(0.5), currentExpressionValue(0)
 {
-    
+
 }
 
 LoudnessDecayValueMachine::~LoudnessDecayValueMachine()
@@ -33,4 +32,20 @@ const float LoudnessDecayValueMachine::getExpressionValue()
 const bool LoudnessDecayValueMachine::isActive()
 {
     return true; // not sure why we need this function at the moment
+}
+
+
+AudioProcessorParameter* ExpressionValueMachine::setOrCreateAndAddParameter (String parameterID, String parameterName,
+        String labelText, NormalisableRange< float > valueRange, float defaultValue,
+        std::function< String(float)> valueToTextFunction,
+        std::function< float(const String &)> textToValueFunction)
+{
+    AudioProcessorParameter* p = parameters->getParameter(parameterID);
+    if(p==nullptr) {
+        return parameters->createAndAddParameter(parameterID, parameterName, labelText, valueRange,
+            defaultValue, valueToTextFunction, textToValueFunction);
+    } else {
+        p->setValue(getDefaultValue(parameterID));
+        return p;
+    }
 }

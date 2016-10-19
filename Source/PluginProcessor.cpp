@@ -272,6 +272,16 @@ void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
     }
 }
 
+void PluginProcessor::addMachine(const String& typeName)
+{
+    if(typeName=="LoudnessDecay") {
+        expressionValueMachines.add(
+            new LoudnessDecayValueMachine(subParameters.add(
+                new AudioProcessorValueTreeState(*this, nullptr)
+            ))
+        );
+    }
+}
 
 //==============================================================================
 // This creates new instances of the plugin..
