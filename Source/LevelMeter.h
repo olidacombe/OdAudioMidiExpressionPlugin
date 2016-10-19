@@ -1,7 +1,7 @@
 #ifndef LEVELMETER_H_INCLUDED
 #define LEVELMETER_H_INCLUDED
 
-#include "JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 class LevelMeter  : public Component {
 public:

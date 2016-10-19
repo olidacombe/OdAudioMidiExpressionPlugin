@@ -33,6 +33,12 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="HUJTUL" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{ADC1520F-EEF4-23E4-7A45-CBBF3BE2AA83}" name="Tests">
+      <FILE id="uE8qwh" name="catch.hpp" compile="0" resource="0" file="Tests/catch.hpp"/>
+      <FILE id="szrr4L" name="NotARealTest.cpp" compile="0" resource="0"
+            file="Tests/NotARealTest.cpp"/>
+      <FILE id="U1ZlK3" name="TestRunner.cpp" compile="0" resource="0" file="Tests/TestRunner.cpp"/>
+    </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vst3Folder="">
