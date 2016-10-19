@@ -29,6 +29,8 @@ private:
     PluginProcessor& processor;
     AudioProcessorValueTreeState& valueTreeState;
     
+    OwnedArray<Audio2MidiComponent> audio2MidiComponents;
+    
     Label decayLabel;
     Slider decaySlider;
     ScopedPointer<SliderAttachment> decayAttachment;

@@ -5,6 +5,27 @@
 #include "MidiOutWorker.h"
 
 
+// make PluginProcessor::maxMachines of these owned by PluginProcessor, then re-use AudioProcessorValueTreeState's as
+// necessary as ExpressionMachines are added/removed.. (by way of setting expressionValueMachine to nullptr here)
+class ExpressionMachineValueTreeState
+{
+public:
+    // will need a set state method for use by setStateInformation
+    ExpressionMachineValueTreeState(AudioProcessor& processor) :
+        parameters(processor, nullptr), expressionValueMachine(nullptr), available(true) {}
+    ~ExpressionMachineValueTreeState()
+    {
+        expressionValueMachine=nullptr;
+    }
+    bool isAvailable() { return available; }
+    void freeMachine() { expressionValueMachine = nullptr; available=true; }
+    ExpressionValueMachine* getMachine() { return expressionValueMachine; }
+private:
+    AudioProcessorValueTreeState parameters;
+    ScopedPointer<ExpressionValueMachine> expressionValueMachine;
+    bool available;
+};
+
 //==============================================================================
 /**
 */
@@ -14,6 +35,8 @@ class PluginProcessor  : public AudioProcessor,
                         public ChangeListener
 {
 public:
+
+    enum { maxMachines = 4 };
 
     //==============================================================================
     PluginProcessor();
@@ -64,6 +87,8 @@ public:
 
 private:
     //==============================================================================
+    OwnedArray<ExpressionValueMachine> expressionValueMachines;
+    OwnedArray<AudioProcessorValueTreeState> subParameters;
     ScopedPointer<MidiOutWorker> midiOutWorker;
     ScopedPointer<MidiOutputList> midiOutputList;
     AudioProcessorValueTreeState parameters;
