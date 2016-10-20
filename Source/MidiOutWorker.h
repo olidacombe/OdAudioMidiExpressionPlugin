@@ -38,6 +38,7 @@ private:
 
 
 class PluginProcessor;
+//class ExpressionValueSource;
 
 class MidiOutWorker : public Timer, public ChangeListener, private ChangeBroadcaster
 {

@@ -8,10 +8,8 @@
   ==============================================================================
 */
 
-#include "MidiOutWorker.h"
-//#include "PluginProcessor.h"
-
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "MidiOutWorker.h"
 
 MidiOutWorker::MidiOutWorker(ExpressionValueSource* e, MidiOutputList* mol)
 : lastOutputCCValue(0), currentOutputCCValue(0), evs(e), midiOutputList(mol)

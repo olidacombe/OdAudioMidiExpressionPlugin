@@ -174,7 +174,7 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, numSamples);
 
-    float incomingLoudness;
+    float incomingLoudness = 0;
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         incomingLoudness += buffer.getRMSLevel(channel, 0, numSamples);
