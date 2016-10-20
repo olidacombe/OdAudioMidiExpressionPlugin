@@ -53,8 +53,10 @@ public:
     void changeListenerCallback(ChangeBroadcaster *) override;
 private:
     void sendMessage();
+    
     int lastOutputCCValue, currentOutputCCValue;
     ExpressionValueSource *evs;
+    //AudioProcessorValueTreeState& parameters;
     ScopedPointer<MidiOutput> midiOutput;
     MidiOutputList *midiOutputList;
 };

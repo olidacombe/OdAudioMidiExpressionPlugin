@@ -13,11 +13,10 @@
 #include "LevelMeter.h"
 
 //==============================================================================
-Audio2MidiComponent::Audio2MidiComponent()
+Audio2MidiComponent::Audio2MidiComponent(AudioProcessorValueTreeState& vts, MidiOutWorker& mow) : parameters(vts)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    midiOutputComboBox = new MidiOutputComboBox(mow);
+    addAndMakeVisible(levelMeter);
 }
 
 /*
@@ -47,8 +46,10 @@ void Audio2MidiComponent::paint (Graphics& g)
                 Justification::centred, true);   // draw some placeholder text
 }
 
-LoudnessDecayComponent::LoudnessDecayComponent() {
-    addAndMakeVisible(levelMeter);
+LoudnessDecayComponent::LoudnessDecayComponent(AudioProcessorValueTreeState& vts, MidiOutWorker& mow)
+: Audio2MidiComponent(vts, mow)
+{
+    
 }
 
 void LoudnessDecayComponent::paint (Graphics& g)

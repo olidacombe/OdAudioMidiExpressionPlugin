@@ -35,15 +35,22 @@ class LevelMeter;
 class Audio2MidiComponent    : public Component
 {
 public:
-    Audio2MidiComponent();
+
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+    typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+
+    // redundancy?  MidiOutWorker could use access to a AudioProcessorValueTreeState
+    // for its settings.  And the state could be retrieved from there.
+    Audio2MidiComponent(AudioProcessorValueTreeState&, MidiOutWorker&);
     virtual ~Audio2MidiComponent()=0;
     virtual void paint(Graphics&) override;
 
 protected:
-    ScopedPointer<LevelMeter> levelMeter;
-
-private:
+    AudioProcessorValueTreeState& parameters;
     ScopedPointer<MidiOutputComboBox> midiOutputComboBox;
+    ScopedPointer<LevelMeter> levelMeter;
+    
+private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Audio2MidiComponent)
 };
@@ -52,11 +59,16 @@ private:
 class LoudnessDecayComponent : public Audio2MidiComponent
 {
 public:
-    LoudnessDecayComponent();
+    LoudnessDecayComponent(AudioProcessorValueTreeState&, MidiOutWorker&);
     ~LoudnessDecayComponent();
     void paint (Graphics&) override;
     void resized() override;
+
 private:
+    Label decayLabel;
+    Slider decaySlider;
+    ScopedPointer<SliderAttachment> decayAttachment;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoudnessDecayComponent)
 };
 
