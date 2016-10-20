@@ -12,7 +12,7 @@
 #define MIDIOUTWORKER_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "ExpressionValueMachine.h"
+//#include "ExpressionValueMachine.h"
 
 
 
@@ -38,7 +38,7 @@ private:
 
 
 class PluginProcessor;
-//class ExpressionValueSource;
+class ExpressionValueSource;
 
 class MidiOutWorker : public Timer, public ChangeListener, private ChangeBroadcaster
 {

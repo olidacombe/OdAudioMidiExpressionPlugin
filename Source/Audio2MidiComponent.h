@@ -12,13 +12,14 @@
 #define AUDIO2MIDICOMPONENT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "LevelMeter.h"
-#include "MidiOutWorker.h"
+//#include "LevelMeter.h"
+//#include "MidiOutWorker.h"
 
 //==============================================================================
 /*
 */
 
+class MidiOutWorker;
 
 class MidiOutputComboBox : public ComboBox
 {
@@ -29,6 +30,7 @@ private:
     MidiOutWorker& midiOutputWorker;
 };
 
+class LevelMeter;
 
 class Audio2MidiComponent    : public Component
 {
@@ -38,7 +40,7 @@ public:
     virtual void paint(Graphics&) override;
 
 protected:
-    LevelMeter levelMeter;
+    ScopedPointer<LevelMeter> levelMeter;
 
 private:
     ScopedPointer<MidiOutputComboBox> midiOutputComboBox;

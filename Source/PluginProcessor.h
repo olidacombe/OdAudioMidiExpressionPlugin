@@ -3,6 +3,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MidiOutWorker.h"
+#include "ExpressionValueMachine.h"
 
 
 // make PluginProcessor::maxMachines of these owned by PluginProcessor, then re-use AudioProcessorValueTreeState's as

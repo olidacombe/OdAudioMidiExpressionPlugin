@@ -10,6 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Audio2MidiComponent.h"
+#include "LevelMeter.h"
 
 //==============================================================================
 Audio2MidiComponent::Audio2MidiComponent()
@@ -76,6 +77,6 @@ void LoudnessDecayComponent::resized()
     // components that your component contains..
     
     Rectangle<int> area = getBounds();
-    levelMeter.setBounds(area.removeFromRight(14).reduced(2));
+    levelMeter->setBounds(area.removeFromRight(14).reduced(2));
 
 }

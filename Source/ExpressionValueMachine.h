@@ -12,7 +12,7 @@
 #define EXPRESSIONVALUEMACHINE_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-//#include "MidiOutWorker.h"
+#include "MidiOutWorker.h"
 
 class ExpressionValueSource
 {
@@ -47,7 +47,7 @@ protected:
     void initializeParametersState();
     
 private:
-    //ScopedPointer<MidiOutWorker> midiOutWorker;
+    ScopedPointer<MidiOutWorker> midiOutWorker;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ExpressionValueMachine)
 };
