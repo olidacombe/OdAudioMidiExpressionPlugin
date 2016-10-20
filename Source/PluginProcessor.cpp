@@ -52,7 +52,7 @@ PluginProcessor::PluginProcessor()
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
 
-    //addMachine("LoudnessDecay");
+    addMachine("LoudnessDecay");
 }
 
 PluginProcessor::~PluginProcessor()

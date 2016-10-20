@@ -10,8 +10,9 @@
 
 #include "ExpressionValueMachine.h"
 
-LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p), decayParam(0.5), currentExpressionValue(0)
+LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p, "LoudnessDecay"), decayParam(0.5), currentExpressionValue(0)
 {
+    initializeParametersState();
     setOrCreateAndAddParameter("decay", "Decay", String(),
         NormalisableRange<float>(0.0f, 0.99f), 0.75f,
         nullptr, nullptr);
@@ -37,7 +38,7 @@ const bool LoudnessDecayValueMachine::isActive()
 }
 
 
-ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p) : parameters(p)
+ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& tn) : typeName(tn), parameters(p)
 {
     initializeParametersState();
 }

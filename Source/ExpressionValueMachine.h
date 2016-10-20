@@ -24,12 +24,13 @@ public:
 class ExpressionValueMachine : public ExpressionValueSource
 {
 public:
-    ExpressionValueMachine(AudioProcessorValueTreeState& p);
+    ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& typeName);
     virtual ~ExpressionValueMachine() {}
     virtual void pushSample(const float& sample)=0;
-    virtual const String getTypeName()=0;
+    const String getTypeName() { return typeName; }
     
 protected:
+    const String typeName;
     AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
         std::function< String(float)> valueToTextFunction,
@@ -52,9 +53,6 @@ public:
     void pushSample(const float& sample) override;
     const float getExpressionValue() override;
     const bool isActive() override;
-    const String getTypeName() override {
-        return "LoudnessDecay";
-    }
 private:
     float decayParam;
     float currentExpressionValue;
