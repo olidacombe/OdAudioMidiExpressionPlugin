@@ -90,6 +90,9 @@ public:
 
 private:
     //==============================================================================
+
+    // no no noo, 3 arrays with dependant indices
+    // create a subProcessor class to contain the buddies!
     OwnedArray<AudioProcessorValueTreeState, CriticalSection> subParameters;
     OwnedArray<ExpressionValueMachine, CriticalSection> expressionValueMachines;
     OwnedArray<MidiOutWorker, CriticalSection> midiOutWorkers;
