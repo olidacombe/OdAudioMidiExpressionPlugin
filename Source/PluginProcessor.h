@@ -89,8 +89,8 @@ public:
 
 private:
     //==============================================================================
-    OwnedArray<ExpressionValueMachine> expressionValueMachines;
-    OwnedArray<AudioProcessorValueTreeState> subParameters;
+    OwnedArray<ExpressionValueMachine, CriticalSection> expressionValueMachines;
+    OwnedArray<AudioProcessorValueTreeState, CriticalSection> subParameters;
     ScopedPointer<MidiOutWorker> midiOutWorker;
     ScopedPointer<MidiOutputList> midiOutputList;
     AudioProcessorValueTreeState parameters;

@@ -10,7 +10,7 @@
 
 #include "ExpressionValueMachine.h"
 
-LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p, "LoudnessDecay"), decayParam(0.5), currentExpressionValue(0)
+LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p, "LoudnessDecay"), /*decayParam(0.5),*/ currentExpressionValue(0)
 {
     initializeParametersState();
     setOrCreateAndAddParameter("decay", "Decay", String(),
@@ -22,9 +22,17 @@ LoudnessDecayValueMachine::~LoudnessDecayValueMachine()
 {
 }
 
+/*
+void LoudnessDecayValueMachine::updateParameters()
+{
+    
+}
+*/
+
 void LoudnessDecayValueMachine::pushSample(const float& sample)
 {
-    currentExpressionValue = sample + decayParam * currentExpressionValue;
+    const float *decayParam = parameters.getRawParameterValue("decay");
+    currentExpressionValue = sample + *decayParam * currentExpressionValue;
 }
 
 const float LoudnessDecayValueMachine::getExpressionValue()

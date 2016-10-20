@@ -180,6 +180,11 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
         incomingLoudness += buffer.getRMSLevel(channel, 0, numSamples);
     }
     
+    for(ExpressionValueMachine* evm : expressionValueMachines) {
+        // do some shit
+        evm->pushSample(incomingLoudness);
+    }
+    
     // go atomic...?
     currentExpressionValue = decayParam * (currentExpressionValue + incomingLoudness);
     
