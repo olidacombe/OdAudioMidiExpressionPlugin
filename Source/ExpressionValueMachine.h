@@ -24,12 +24,14 @@ public:
 class ExpressionValueMachine : public ExpressionValueSource
 {
 public:
-    ExpressionValueMachine(AudioProcessorValueTreeState* p) : parameters(p) {}
+    ExpressionValueMachine(AudioProcessorValueTreeState& p);
     virtual ~ExpressionValueMachine() {}
     virtual void pushSample(const float& sample)=0;
     virtual const String getTypeName()=0;
 private:
-    AudioProcessorValueTreeState* parameters;
+    AudioProcessorValueTreeState& parameters;
+    
+    void initializeParametersState();
     
     AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
@@ -45,7 +47,7 @@ private:
 class LoudnessDecayValueMachine : public ExpressionValueMachine
 {
 public:
-    LoudnessDecayValueMachine(AudioProcessorValueTreeState* p);
+    LoudnessDecayValueMachine(AudioProcessorValueTreeState& p);
     ~LoudnessDecayValueMachine();
     void pushSample(const float& sample) override;
     const float getExpressionValue() override;

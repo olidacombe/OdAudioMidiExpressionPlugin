@@ -51,6 +51,7 @@ PluginProcessor::PluginProcessor()
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
 
+    addMachine("LoudnessDecay");
 }
 
 PluginProcessor::~PluginProcessor()
@@ -272,15 +273,17 @@ void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
     }
 }
 
-void PluginProcessor::addMachine(const String& typeName)
+ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
 {
     if(typeName=="LoudnessDecay") {
-        expressionValueMachines.add(
-            new LoudnessDecayValueMachine(subParameters.add(
+        return expressionValueMachines.add(
+            new LoudnessDecayValueMachine(*subParameters.add(
                 new AudioProcessorValueTreeState(*this, nullptr)
             ))
         );
     }
+    
+    return nullptr;
 }
 
 //==============================================================================
