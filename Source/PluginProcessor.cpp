@@ -36,6 +36,7 @@ PluginProcessor::PluginProcessor()
         }
     );
     
+    // this will go when the machines are implemented mwahahaaaa
     parameters.createAndAddParameter("decay", "Decay", String(),
         NormalisableRange<float>(0.0f, 0.99f), 0.75f,
         nullptr, nullptr);
@@ -51,7 +52,7 @@ PluginProcessor::PluginProcessor()
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
 
-    addMachine("LoudnessDecay");
+    //addMachine("LoudnessDecay");
 }
 
 PluginProcessor::~PluginProcessor()

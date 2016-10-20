@@ -28,18 +28,18 @@ public:
     virtual ~ExpressionValueMachine() {}
     virtual void pushSample(const float& sample)=0;
     virtual const String getTypeName()=0;
-private:
-    AudioProcessorValueTreeState& parameters;
     
-    void initializeParametersState();
-    
+protected:
     AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
         std::function< String(float)> valueToTextFunction,
         std::function< float(const String &)> textToValueFunction);
     
     virtual const float getDefaultValue(const String& parameterID) { return 0.0f; }
+    AudioProcessorValueTreeState& parameters;
+    void initializeParametersState();
     
+private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ExpressionValueMachine)
 };
 

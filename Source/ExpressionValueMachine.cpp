@@ -12,7 +12,9 @@
 
 LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p), decayParam(0.5), currentExpressionValue(0)
 {
-
+    setOrCreateAndAddParameter("decay", "Decay", String(),
+        NormalisableRange<float>(0.0f, 0.99f), 0.75f,
+        nullptr, nullptr);
 }
 
 LoudnessDecayValueMachine::~LoudnessDecayValueMachine()
@@ -37,7 +39,7 @@ const bool LoudnessDecayValueMachine::isActive()
 
 ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p) : parameters(p)
 {
-
+    initializeParametersState();
 }
 
 void ExpressionValueMachine::initializeParametersState()
