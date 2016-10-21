@@ -29,6 +29,9 @@
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Z8Bh6G" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
+      <FILE id="ipamv3" name="SubProcessor.cpp" compile="1" resource="0"
+            file="Source/SubProcessor.cpp"/>
+      <FILE id="tafxQ8" name="SubProcessor.h" compile="0" resource="0" file="Source/SubProcessor.h"/>
       <FILE id="zajNlq" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="HUJTUL" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>

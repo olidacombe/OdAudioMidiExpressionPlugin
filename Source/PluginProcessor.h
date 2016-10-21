@@ -4,6 +4,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MidiOutWorker.h"
 #include "ExpressionValueMachine.h"
+#include "SubProcessor.h"
 
 
 // make PluginProcessor::maxMachines of these owned by PluginProcessor, then re-use AudioProcessorValueTreeState's as
@@ -26,6 +27,7 @@ private:
     ScopedPointer<ExpressionValueMachine> expressionValueMachine;
     bool available;
 };
+
 
 //==============================================================================
 /**
@@ -85,7 +87,15 @@ public:
     const int getMidiOutputIndex();
     const bool isActive() override;
     
+    // remove?
     ExpressionValueMachine* addMachine(const String& typeName);
+    
+    template <typename T> T* UseType() 
+    {
+        return static_cast<T*>(nullptr);
+    }
+    SubProcessor* addSubProcessor(const String& typeName);
+    template <typename T> SubProcessor* addSubProcessor(T*);
     
 
 private:
@@ -96,6 +106,8 @@ private:
     OwnedArray<AudioProcessorValueTreeState, CriticalSection> subParameters;
     OwnedArray<ExpressionValueMachine, CriticalSection> expressionValueMachines;
     OwnedArray<MidiOutWorker, CriticalSection> midiOutWorkers;
+    
+    OwnedArray<SubProcessor, CriticalSection> subProcessors;
     
     ScopedPointer<MidiOutWorker> midiOutWorker;
     ScopedPointer<MidiOutputList> midiOutputList;

@@ -1,7 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-
 //==============================================================================
 PluginProcessor::PluginProcessor()
 :   parameters(*this, nullptr), currentExpressionValue(0.0), midiOutputIndex(0)
@@ -290,6 +289,23 @@ ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
     }
     
     return nullptr;
+}
+
+
+SubProcessor* PluginProcessor::addSubProcessor(const String& typeName)
+{
+
+    if(typeName == "LoudnessDecay") {
+        return addSubProcessor(UseType<LoudnessDecayValueMachine>());
+    }
+    return nullptr;
+}
+
+template <typename T>
+SubProcessor* PluginProcessor::addSubProcessor(T*)
+{
+    AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
+    return subProcessors.add(new SubProcessor(*newParams, *midiOutputList, new T(*newParams)));
 }
 
 //==============================================================================
