@@ -51,7 +51,10 @@ PluginProcessor::PluginProcessor()
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
 
-    midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
+    // slated for removal
+    //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
+    
+    //addSubProcessor("LoudnessDecay");
 }
 
 PluginProcessor::~PluginProcessor()
@@ -278,6 +281,7 @@ void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
     }
 }
 
+// slated for removal
 ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
 {
     if(typeName=="LoudnessDecay") {
@@ -292,6 +296,13 @@ ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
 }
 
 
+template <typename T>
+SubProcessor* PluginProcessor::addSubProcessor(T*)
+{
+    AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
+    return subProcessors.add(new SubProcessor(*newParams, *midiOutputList, new T(*newParams)));
+}
+
 SubProcessor* PluginProcessor::addSubProcessor(const String& typeName)
 {
 
@@ -301,16 +312,10 @@ SubProcessor* PluginProcessor::addSubProcessor(const String& typeName)
     return nullptr;
 }
 
-template <typename T>
-SubProcessor* PluginProcessor::addSubProcessor(T*)
-{
-    AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
-    return subProcessors.add(new SubProcessor(*newParams, *midiOutputList, new T(*newParams)));
-}
-
 //==============================================================================
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PluginProcessor();
 }
+

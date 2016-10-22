@@ -90,12 +90,14 @@ public:
     // remove?
     ExpressionValueMachine* addMachine(const String& typeName);
     
+    
     template <typename T> T* UseType() 
     {
         return static_cast<T*>(nullptr);
     }
-    SubProcessor* addSubProcessor(const String& typeName);
+    
     template <typename T> SubProcessor* addSubProcessor(T*);
+    SubProcessor* addSubProcessor(const String& typeName);
     
 
 private:
