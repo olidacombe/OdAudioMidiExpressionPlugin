@@ -64,6 +64,7 @@ PluginProcessor::PluginProcessor()
     
     //addSubProcessor("LoudnessDecay");
     addSubProcessor<LoudnessDecayValueMachine>();
+    addSubProcessor<LoudnessDecayValueMachine>();
 }
 
 PluginProcessor::~PluginProcessor()
@@ -252,10 +253,7 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // move this later when you actually want subParameters saved
-    ScopedPointer<XmlElement> xml (parameters.state.createXml());
-    copyXmlToBinary (*xml, destData);
-    
+
     int i=0;
     for(const AudioProcessorValueTreeState* const subProc : subParameters)
     {
@@ -265,6 +263,9 @@ void PluginProcessor::getStateInformation (MemoryBlock& destData)
         subProcParams.addChild(subProcStateCopy, -1, nullptr);
         parameters.state.addChild(subProcParams, -1, nullptr);
     }
+    
+    ScopedPointer<XmlElement> xml (parameters.state.createXml());
+    copyXmlToBinary (*xml, destData);
     
     DBG(parameters.state.toXmlString());
     
@@ -296,6 +297,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             parameters.state = ValueTree::fromXml (*xmlState);
             
             // sort the SubProcessor elements
+            // ... todo
             
             // overwrite our SubProcessor param value trees from here
             // using SubProcessor.parameters.copyPropertiesFrom
@@ -308,6 +310,18 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             
             // that way we don't overwrite anything wrongly, and new stuff
             // gets created as desired
+            
+            ValueTree vt;
+            while((vt = parameters.state.getChildWithName(Identifier("SubProcessor"))).isValid())
+            {
+                DBG("SubProcessor state read");
+                if(vt.hasProperty("index"))
+                {
+                    SubProcessor* sp = subProcessors[vt["index"]];
+                    sp->setParameters(vt);
+                }
+                parameters.state.removeChild(vt, nullptr);
+            }
         }
     }
             

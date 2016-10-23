@@ -22,6 +22,8 @@ public:
     SubProcessor(AudioProcessorValueTreeState&, MidiOutputList*, ExpressionValueMachine*);
     ~SubProcessor();
     
+    void setParameters(const ValueTree& source);
+    
 private:
     AudioProcessorValueTreeState& parameters;
     ScopedPointer<ExpressionValueMachine> machine;
