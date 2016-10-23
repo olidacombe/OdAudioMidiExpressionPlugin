@@ -23,14 +23,11 @@ public:
 };
 
 
-//class MidiOutWorker;
-
 class ExpressionValueMachine : public ExpressionValueSource
 {
 public:
     ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& typeName);
     virtual ~ExpressionValueMachine() {}
-    //virtual void updateParameters() {}
     virtual void pushSample(const float& sample)=0;
     const String getTypeName() { return typeName; }
     
@@ -44,7 +41,6 @@ protected:
     
     virtual const float getDefaultValue(const String& parameterID) { return 0.0f; }
     AudioProcessorValueTreeState& parameters;
-    //void initializeParametersState();
     
 private:
     ScopedPointer<MidiOutWorker> midiOutWorker;
@@ -58,12 +54,12 @@ class LoudnessDecayValueMachine : public ExpressionValueMachine
 public:
     LoudnessDecayValueMachine(AudioProcessorValueTreeState& p);
     ~LoudnessDecayValueMachine();
-    //void updateParameters() override;
+
     void pushSample(const float& sample) override;
     const float getExpressionValue() override;
     const bool isActive() override;
 private:
-    //float decayParam;
+
     float currentExpressionValue;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LoudnessDecayValueMachine)
 };

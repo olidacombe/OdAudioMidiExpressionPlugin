@@ -21,12 +21,6 @@ LoudnessDecayValueMachine::~LoudnessDecayValueMachine()
 {
 }
 
-/*
-void LoudnessDecayValueMachine::updateParameters()
-{
-    
-}
-*/
 
 void LoudnessDecayValueMachine::pushSample(const float& sample)
 {
@@ -50,7 +44,13 @@ ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, 
     //initializeParametersState();
 }
 
-
+/*
+    this is kind of looking ahead to a world where we let the user dynamically make new "tabs" of different machine
+    types, re-order them etc.  Due to AudioProcessorValueTreeState needing to have the same lifespan as the processor,
+    we'd better be re-using those objects - and you don't know what type yours used to have so...
+    Also, at save time, it'd be best to prune off any parameter values which don't apply to their assigned processor
+    from the ValueTree before going to XML->disk.
+*/
 AudioProcessorParameter* ExpressionValueMachine::setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
         std::function< String(float)> valueToTextFunction,
@@ -61,6 +61,8 @@ AudioProcessorParameter* ExpressionValueMachine::setOrCreateAndAddParameter (Str
         return parameters.createAndAddParameter(parameterID, parameterName, labelText, valueRange,
             defaultValue, valueToTextFunction, textToValueFunction);
     } else {
+        // this isn't taking care of parameters with the same name from different machines having different
+        // defaults, ranges, text functions etc :\
         p->setValue(getDefaultValue(parameterID));
         return p;
     }

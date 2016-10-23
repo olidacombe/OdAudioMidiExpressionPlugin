@@ -27,9 +27,6 @@ SubProcessor::~SubProcessor()
 
 void SubProcessor::initializeParameters()
 {
-    // I don't like storing a type name string in these classes
-    // I want ExpressionValueMachine constructor without that
-    // and to scrap that property method if possible 
     parameters.state = ValueTree (Identifier (machine->getTypeName()));
     ValueTree midiParameters (Identifier("MidiParameters"));
     
