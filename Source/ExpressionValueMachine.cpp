@@ -12,7 +12,6 @@
 
 LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p, "LoudnessDecay"), /*decayParam(0.5),*/ currentExpressionValue(0)
 {
-    initializeParametersState();
     setOrCreateAndAddParameter("decay", "Decay", String(),
         NormalisableRange<float>(0.0f, 0.99f), 0.75f,
         nullptr, nullptr);
@@ -48,24 +47,9 @@ const bool LoudnessDecayValueMachine::isActive()
 
 ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& tn) : typeName(tn), parameters(p)
 {
-    initializeParametersState();
+    //initializeParametersState();
 }
 
-void ExpressionValueMachine::initializeParametersState()
-{
-    parameters.state = ValueTree (Identifier (getTypeName()));
-    ValueTree midiParameters (Identifier("MidiParameters"));
-    
-    ValueTree midiOutputParameter (Identifier("Output"));
-    midiOutputParameter.setProperty("name", "", nullptr);
-    midiParameters.addChild(midiOutputParameter, -1, nullptr);
-    
-    ValueTree midiChannelParameter(Identifier("Channel"));
-    midiChannelParameter.setProperty("number", "1", nullptr);
-    midiParameters.addChild(midiChannelParameter, -1, nullptr);
-    
-    parameters.state.addChild(midiParameters, -1, nullptr);
-}
 
 AudioProcessorParameter* ExpressionValueMachine::setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,

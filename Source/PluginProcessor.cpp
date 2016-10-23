@@ -246,14 +246,38 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
+    // move this later when you actually want subParameters saved
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
-    #if JUCE_DEBUG
-    #if JUCE_OSX
+    copyXmlToBinary (*xml, destData);
+    
+    int i=0;
+    for(const AudioProcessorValueTreeState* const subProc : subParameters)
+    {
+        ValueTree subProcParams = ValueTree(Identifier("SubProcessor"));
+        subProcParams.setProperty(Identifier("index"), i++, nullptr);
+        ValueTree subProcStateCopy = subProc->state.createCopy();
+        subProcParams.addChild(subProcStateCopy, -1, nullptr);
+        parameters.state.addChild(subProcParams, -1, nullptr);
+    }
+    
+
+    
+    DBG(parameters.state.toXmlString());
+    
+    //#if JUCE_DEBUG
+    //#if JUCE_OSX
+    
+    /*
+    DBG("DUMP TREE");
+    
+    xml = nullptr;
+    xml = new XmlElement(*saveMe.createXml());
     const File xmlDebugDump ("/Users/oli/lol.xml");
     xml->writeToFile(xmlDebugDump, "");
-    #endif
-    #endif
-    copyXmlToBinary (*xml, destData);
+    */
+    
+    //#endif
+    //#endif
 }
 
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)

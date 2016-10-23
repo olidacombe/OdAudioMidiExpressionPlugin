@@ -44,7 +44,7 @@ protected:
     
     virtual const float getDefaultValue(const String& parameterID) { return 0.0f; }
     AudioProcessorValueTreeState& parameters;
-    void initializeParametersState();
+    //void initializeParametersState();
     
 private:
     ScopedPointer<MidiOutWorker> midiOutWorker;
