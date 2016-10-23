@@ -90,8 +90,6 @@ public:
     // remove?
     ExpressionValueMachine* addMachine(const String& typeName);
 
-    SubProcessor* addSubProcessor(const String& typeName);
-    
 
 private:
     //==============================================================================

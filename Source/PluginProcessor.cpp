@@ -56,7 +56,8 @@ PluginProcessor::PluginProcessor()
     // slated for removal
     //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
     
-    addSubProcessor("LoudnessDecay");
+    //addSubProcessor("LoudnessDecay");
+    addSubProcessor<LoudnessDecayValueMachine>();
 }
 
 PluginProcessor::~PluginProcessor()
@@ -297,15 +298,6 @@ ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
     return nullptr;
 }
 
-
-
-SubProcessor* PluginProcessor::addSubProcessor(const String& typeName)
-{    
-    if(typeName == "LoudnessDecay") {
-        return addSubProcessor<LoudnessDecayValueMachine>();
-    }
-    return nullptr;
-}
 
 template <typename T>
 SubProcessor* PluginProcessor::addSubProcessor()
