@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+
 //==============================================================================
 PluginProcessor::PluginProcessor()
 :   parameters(*this, nullptr), currentExpressionValue(0.0), midiOutputIndex(0)
@@ -54,7 +56,7 @@ PluginProcessor::PluginProcessor()
     // slated for removal
     //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
     
-    //addSubProcessor("LoudnessDecay");
+    addSubProcessor("LoudnessDecay");
 }
 
 PluginProcessor::~PluginProcessor()
@@ -296,21 +298,22 @@ ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
 }
 
 
+
+SubProcessor* PluginProcessor::addSubProcessor(const String& typeName)
+{    
+    if(typeName == "LoudnessDecay") {
+        return addSubProcessor<LoudnessDecayValueMachine>();
+    }
+    return nullptr;
+}
+
 template <typename T>
-SubProcessor* PluginProcessor::addSubProcessor(T*)
+SubProcessor* PluginProcessor::addSubProcessor()
 {
     AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
     return subProcessors.add(new SubProcessor(*newParams, *midiOutputList, new T(*newParams)));
 }
 
-SubProcessor* PluginProcessor::addSubProcessor(const String& typeName)
-{
-
-    if(typeName == "LoudnessDecay") {
-        return addSubProcessor(UseType<LoudnessDecayValueMachine>());
-    }
-    return nullptr;
-}
 
 //==============================================================================
 // This creates new instances of the plugin..

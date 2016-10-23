@@ -89,14 +89,7 @@ public:
     
     // remove?
     ExpressionValueMachine* addMachine(const String& typeName);
-    
-    
-    template <typename T> T* UseType() 
-    {
-        return static_cast<T*>(nullptr);
-    }
-    
-    template <typename T> SubProcessor* addSubProcessor(T*);
+
     SubProcessor* addSubProcessor(const String& typeName);
     
 
@@ -120,6 +113,8 @@ private:
     
     int midiOutputIndex;
     void setMidiOutputName(const String& name);
+    
+    template <typename T> SubProcessor* addSubProcessor();
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
