@@ -30,6 +30,7 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     // editor's size to whatever you need it to be.
     
     
+    loudnessDecayComponent = new LoudnessDecayComponent(p, 
     
     
     

@@ -79,6 +79,7 @@ public:
     
     void changeListenerCallback(ChangeBroadcaster* src) override;
     
+    // slated for removal
     int setMidiOutput(int index);
     int setMidiOutput(const String& name);
     const String getMidiOutputName();
@@ -86,6 +87,7 @@ public:
     const float getExpressionValue() override;
     const int getMidiOutputIndex();
     const bool isActive() override;
+    // end slated for removal
     
     // remove?
     ExpressionValueMachine* addMachine(const String& typeName);

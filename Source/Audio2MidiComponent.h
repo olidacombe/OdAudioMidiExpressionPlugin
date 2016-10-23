@@ -41,7 +41,7 @@ public:
 
     // redundancy?  MidiOutWorker could use access to a AudioProcessorValueTreeState
     // for its settings.  And the state could be retrieved from there.
-    Audio2MidiComponent(AudioProcessorValueTreeState&, MidiOutWorker&);
+    Audio2MidiComponent(SubProcessor&);
     virtual ~Audio2MidiComponent()=0;
     virtual void paint(Graphics&) override;
 
@@ -59,7 +59,7 @@ private:
 class LoudnessDecayComponent : public Audio2MidiComponent
 {
 public:
-    LoudnessDecayComponent(AudioProcessorValueTreeState&, MidiOutWorker&);
+    LoudnessDecayComponent(SubProcessor&);
     ~LoudnessDecayComponent();
     void paint (Graphics&) override;
     void resized() override;
