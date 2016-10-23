@@ -7,6 +7,7 @@
 PluginProcessor::PluginProcessor()
 :   parameters(*this, nullptr), currentExpressionValue(0.0), midiOutputIndex(0)
 {
+    //[ to go ]
     parameters.createAndAddParameter ("thru", "Thru", String(),
         NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
         [](float value)
@@ -41,8 +42,12 @@ PluginProcessor::PluginProcessor()
     parameters.createAndAddParameter("decay", "Decay", String(),
         NormalisableRange<float>(0.0f, 0.99f), 0.75f,
         nullptr, nullptr);
+    // [/ to go ]
     
+    // must stay!
     parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
+    
+    // [ to go ]
     ValueTree midiParameters (Identifier("MidiParameters"));
     ValueTree midiOutputParameter (Identifier("Output"));
     midiOutputParameter.setProperty("name", "", nullptr);
@@ -52,7 +57,8 @@ PluginProcessor::PluginProcessor()
     midiOutputList = new MidiOutputList();
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
-
+    // [/ to go ]
+    
     // slated for removal
     //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
     
@@ -260,8 +266,6 @@ void PluginProcessor::getStateInformation (MemoryBlock& destData)
         parameters.state.addChild(subProcParams, -1, nullptr);
     }
     
-
-    
     DBG(parameters.state.toXmlString());
     
     //#if JUCE_DEBUG
@@ -286,8 +290,28 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
     ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
         
     if (xmlState != nullptr)
+    {
         if (xmlState->hasTagName (parameters.state.getType()))
+        {  
             parameters.state = ValueTree::fromXml (*xmlState);
+            
+            // sort the SubProcessor elements
+            
+            // overwrite our SubProcessor param value trees from here
+            // using SubProcessor.parameters.copyPropertiesFrom
+            // then remove the SubProcessor element from parameters.state
+            // they'll be replaced by getStateInformation.
+            
+            // check the name?  Yes, the above can be done by a method in
+            // ExpressionValueMachine that checks against machine->getName
+            // before performing copyPropertiesFrom
+            
+            // that way we don't overwrite anything wrongly, and new stuff
+            // gets created as desired
+        }
+    }
+            
+    
 }
 
 const float PluginProcessor::getExpressionValue() {
@@ -326,6 +350,9 @@ ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
 template <typename T>
 SubProcessor* PluginProcessor::addSubProcessor()
 {
+    // not doing any type checking at the moment - no dynamism in creation so it's all fixed order, particularly
+    // as we index subParameters on getParameterState and sort on setParameterState
+    
     AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
     return subProcessors.add(new SubProcessor(*newParams, midiOutputList, new T(*newParams)));
 }
