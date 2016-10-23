@@ -39,6 +39,14 @@ void SubProcessor::initializeParameters()
     midiParameters.addChild(midiChannelParameter, -1, nullptr);
     
     parameters.state.addChild(midiParameters, -1, nullptr);
+    
+/*  // an experiment based on worry, based on the appearance that
+    // all AudoProcessorValueTreeState saves are producing the same
+    // list of parameters... differently populated :S
+    float *changeMe = parameters.getRawParameterValue("active");
+    if(changeMe != nullptr)
+        *changeMe=0.5;
+*/
 }
 
 void SubProcessor::setParameters(const ValueTree& source)

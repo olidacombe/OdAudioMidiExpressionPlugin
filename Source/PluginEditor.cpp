@@ -28,6 +28,11 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     processor.addChangeListener(this);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+    
+    
+    
+    
+    
     setSize (400, 300);
 }
 

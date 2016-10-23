@@ -37,6 +37,7 @@ PluginProcessor::PluginProcessor()
             return 0.0f;
         }
     );
+
     
     // this will go when the machines are implemented mwahahaaaa
     parameters.createAndAddParameter("decay", "Decay", String(),

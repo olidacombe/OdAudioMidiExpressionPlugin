@@ -42,6 +42,8 @@ private:
     ScopedPointer<ButtonAttachment> activeAttachment;
     
     ComboBox midiOutputList;
+    
+    ScopedPointer<LoudnessDecayComponent> loudnessDecayComponent;
 
     void updateAvailableMidiOutputList();
     
