@@ -23,6 +23,7 @@ public:
     ~SubProcessor();
     
     void setParameters(const ValueTree& source);
+    ValueTree& state() { return parameters.state; }
     
 private:
     AudioProcessorValueTreeState& parameters;

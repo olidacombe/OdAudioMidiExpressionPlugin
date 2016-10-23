@@ -64,7 +64,7 @@ PluginProcessor::PluginProcessor()
     
     //addSubProcessor("LoudnessDecay");
     addSubProcessor<LoudnessDecayValueMachine>();
-    addSubProcessor<LoudnessDecayValueMachine>();
+    
 }
 
 PluginProcessor::~PluginProcessor()
@@ -255,11 +255,12 @@ void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
 
     int i=0;
-    for(const AudioProcessorValueTreeState* const subProc : subParameters)
+    for(SubProcessor* subProc : subProcessors)
     {
+        
         ValueTree subProcParams = ValueTree(Identifier("SubProcessor"));
         subProcParams.setProperty(Identifier("index"), i++, nullptr);
-        ValueTree subProcStateCopy = subProc->state.createCopy();
+        ValueTree subProcStateCopy = subProc->state().createCopy();
         subProcParams.addChild(subProcStateCopy, -1, nullptr);
         parameters.state.addChild(subProcParams, -1, nullptr);
     }
@@ -318,7 +319,8 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
                 if(vt.hasProperty("index"))
                 {
                     SubProcessor* sp = subProcessors[vt["index"]];
-                    sp->setParameters(vt);
+                    if(sp != nullptr)
+                        sp->setParameters(vt);
                 }
                 parameters.state.removeChild(vt, nullptr);
             }
