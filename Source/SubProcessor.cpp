@@ -18,5 +18,6 @@ SubProcessor::SubProcessor(AudioProcessorValueTreeState* vts, MidiOutputList* mo
 
 SubProcessor::~SubProcessor()
 {
+    midiOutWorker = nullptr;
     machine = nullptr;
 }
