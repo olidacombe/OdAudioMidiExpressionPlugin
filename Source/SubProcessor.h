@@ -24,7 +24,7 @@ class SubProcessor
 {
 public:
 
-    SubProcessor(AudioProcessorValueTreeState&, MidiOutputList&, ExpressionValueMachine*);
+    SubProcessor(AudioProcessorValueTreeState*, MidiOutputList*, ExpressionValueMachine*);
     ~SubProcessor();
     
 private:

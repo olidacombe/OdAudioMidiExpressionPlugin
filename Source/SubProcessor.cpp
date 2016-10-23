@@ -10,13 +10,13 @@
 
 #include "SubProcessor.h"
 
-SubProcessor::SubProcessor(AudioProcessorValueTreeState& vts, MidiOutputList& mol, ExpressionValueMachine* mch)
+SubProcessor::SubProcessor(AudioProcessorValueTreeState* vts, MidiOutputList* mol, ExpressionValueMachine* mch)
 : machine(mch)
 {
-    
+    midiOutWorker = new MidiOutWorker(machine, mol);
 }
 
 SubProcessor::~SubProcessor()
 {
-    
+    machine = nullptr;
 }

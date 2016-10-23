@@ -303,7 +303,7 @@ template <typename T>
 SubProcessor* PluginProcessor::addSubProcessor()
 {
     AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
-    return subProcessors.add(new SubProcessor(*newParams, *midiOutputList, new T(*newParams)));
+    return subProcessors.add(new SubProcessor(newParams, midiOutputList, new T(*newParams)));
 }
 
 
