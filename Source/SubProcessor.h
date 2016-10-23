@@ -14,24 +14,21 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ExpressionValueMachine.h"
 
-/*
-class MidiOutputList;
-class MidiOutWorker;
-class ExpressionValueMachine;
-*/
 
 class SubProcessor
 {
 public:
 
-    SubProcessor(AudioProcessorValueTreeState*, MidiOutputList*, ExpressionValueMachine*);
+    SubProcessor(AudioProcessorValueTreeState&, MidiOutputList*, ExpressionValueMachine*);
     ~SubProcessor();
     
 private:
-
+    AudioProcessorValueTreeState& parameters;
     ScopedPointer<ExpressionValueMachine> machine;
     ScopedPointer<MidiOutWorker> midiOutWorker;
 
+    void initializeParameters();
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SubProcessor)
 };
 
