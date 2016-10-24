@@ -13,17 +13,20 @@
 #include "LevelMeter.h"
 
 //==============================================================================
-Audio2MidiComponent::Audio2MidiComponent(AudioProcessorValueTreeState& vts, MidiOutWorker& mow) : parameters(vts)
+Audio2MidiComponent::Audio2MidiComponent(SubProcessor& sp)
+: subProcessor(sp), parameters(sp.getParameters())
 {
-    midiOutputComboBox = new MidiOutputComboBox(mow);
+    midiOutputComboBox = new MidiOutputComboBox(subProcessor.getMidiOutWorker() );
     addAndMakeVisible(levelMeter);
 }
 
-/*
+
 Audio2MidiComponent::~Audio2MidiComponent()
 {
+    midiOutputComboBox = nullptr;
+    levelMeter = nullptr;
 }
-*/
+
 
 
 void Audio2MidiComponent::paint (Graphics& g)
@@ -46,8 +49,13 @@ void Audio2MidiComponent::paint (Graphics& g)
                 Justification::centred, true);   // draw some placeholder text
 }
 
-LoudnessDecayComponent::LoudnessDecayComponent(AudioProcessorValueTreeState& vts, MidiOutWorker& mow)
-: Audio2MidiComponent(vts, mow)
+LoudnessDecayComponent::LoudnessDecayComponent(SubProcessor& sp)
+: Audio2MidiComponent(sp)
+{
+    
+}
+
+LoudnessDecayComponent::~LoudnessDecayComponent()
 {
     
 }

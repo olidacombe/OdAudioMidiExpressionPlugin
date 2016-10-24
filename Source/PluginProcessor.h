@@ -87,10 +87,12 @@ public:
     const float getExpressionValue() override;
     const int getMidiOutputIndex();
     const bool isActive() override;
+    
+    ExpressionValueMachine* addMachine(const String& typeName);
     // end slated for removal
     
-    // remove?
-    ExpressionValueMachine* addMachine(const String& typeName);
+    SubProcessor& getSubProcessor(int index);
+    
 
 
 private:

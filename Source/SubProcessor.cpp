@@ -49,6 +49,7 @@ void SubProcessor::initializeParameters()
 */
 }
 
+
 void SubProcessor::setParameters(const ValueTree& source)
 {
     ValueTree machineParams = source.getChildWithName(Identifier(machine->getTypeName()));

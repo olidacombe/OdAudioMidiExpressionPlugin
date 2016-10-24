@@ -22,10 +22,13 @@ public:
     SubProcessor(AudioProcessorValueTreeState&, MidiOutputList*, ExpressionValueMachine*);
     ~SubProcessor();
     
+    AudioProcessorValueTreeState& getParameters() { return parameters; }
     void setParameters(const ValueTree& source);
+    MidiOutWorker& getMidiOutWorker() { return *midiOutWorker; }
     ValueTree& state() { return parameters.state; }
     
 private:
+    // maybe instances should own their Audio2MidiComponent ?
     AudioProcessorValueTreeState& parameters;
     ScopedPointer<ExpressionValueMachine> machine;
     ScopedPointer<MidiOutWorker> midiOutWorker;

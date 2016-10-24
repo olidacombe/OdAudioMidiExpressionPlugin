@@ -382,3 +382,9 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new PluginProcessor();
 }
 
+
+// this won't be done in such a way
+SubProcessor& PluginProcessor::getSubProcessor(int index)
+{
+    return *subProcessors[index];
+}
