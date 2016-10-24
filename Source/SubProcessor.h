@@ -13,7 +13,9 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ExpressionValueMachine.h"
+//#include "Audio2MidiComponent.h"
 
+class Audio2MidiComponent;
 
 class SubProcessor
 {
@@ -27,9 +29,12 @@ public:
     MidiOutWorker& getMidiOutWorker() { return *midiOutWorker; }
     ValueTree& state() { return parameters.state; }
     
+    Audio2MidiComponent* getComponent() { return component; }
+    
 private:
     // maybe instances should own their Audio2MidiComponent ?
     AudioProcessorValueTreeState& parameters;
+    ScopedPointer<Audio2MidiComponent> component;
     ScopedPointer<ExpressionValueMachine> machine;
     ScopedPointer<MidiOutWorker> midiOutWorker;
 

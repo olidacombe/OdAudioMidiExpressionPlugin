@@ -17,6 +17,8 @@ SubProcessor::SubProcessor(AudioProcessorValueTreeState& vts, MidiOutputList* mo
     
     // kind of redundant when there's already a stored state - meh
     initializeParameters();
+    
+    component = machine->getNewComponent(*this);
 }
 
 SubProcessor::~SubProcessor()

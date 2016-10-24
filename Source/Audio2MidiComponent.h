@@ -12,7 +12,7 @@
 #define AUDIO2MIDICOMPONENT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "SubProcessor.h"
+//#include "SubProcessor.h"
 #include "LevelMeter.h"
 //#include "MidiOutWorker.h"
 
@@ -21,6 +21,7 @@
 */
 
 class MidiOutWorker;
+class SubProcessor;
 
 class MidiOutputComboBox : public ComboBox
 {

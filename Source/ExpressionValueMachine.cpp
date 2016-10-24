@@ -39,6 +39,12 @@ const bool LoudnessDecayValueMachine::isActive()
 }
 
 
+Audio2MidiComponent* LoudnessDecayValueMachine::getNewComponent(SubProcessor& parent)
+{
+    return new LoudnessDecayComponent(parent);
+}
+
+
 ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& tn) : typeName(tn), parameters(p)
 {
     //initializeParametersState();

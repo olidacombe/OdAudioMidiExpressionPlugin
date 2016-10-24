@@ -29,6 +29,8 @@ private:
     PluginProcessor& processor;
     AudioProcessorValueTreeState& valueTreeState;
     
+    Audio2MidiComponent* subProcessorComponent;
+    
     OwnedArray<Audio2MidiComponent> audio2MidiComponents;
     
     Label decayLabel;
@@ -42,8 +44,6 @@ private:
     ScopedPointer<ButtonAttachment> activeAttachment;
     
     ComboBox midiOutputList;
-    
-    ScopedPointer<LoudnessDecayComponent> loudnessDecayComponent;
 
     void updateAvailableMidiOutputList();
     

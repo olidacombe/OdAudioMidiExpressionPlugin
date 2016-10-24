@@ -11,6 +11,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Audio2MidiComponent.h"
 #include "LevelMeter.h"
+#include "SubProcessor.h"
 
 //==============================================================================
 Audio2MidiComponent::Audio2MidiComponent(SubProcessor& sp)
