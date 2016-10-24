@@ -31,7 +31,7 @@ PluginProcessorEditor::PluginProcessorEditor (PluginProcessor& p, AudioProcessor
     
     
     loudnessDecayComponent = new LoudnessDecayComponent(processor.getSubProcessor(0));
-    
+    addAndMakeVisible(loudnessDecayComponent);
     
     
     setSize (400, 300);
@@ -64,6 +64,8 @@ void PluginProcessorEditor::resized()
     Rectangle<int> decayBox = area.removeFromTop(50);
     decaySlider.setBounds(decayBox.removeFromLeft(100));
     decayLabel.setBounds(decayBox.removeFromLeft(50));
+    
+    //loudnessDecayComponent->setBounds(area.reduced(2));
 }
 
 

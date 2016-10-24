@@ -4,7 +4,7 @@
 LevelMeter::LevelMeter ()
 {
     
-    setSize (20, 100);
+    setSize (20, 40);
 
 }
 

@@ -39,8 +39,6 @@ public:
     typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
-    // redundancy?  MidiOutWorker could use access to a AudioProcessorValueTreeState
-    // for its settings.  And the state could be retrieved from there.
     Audio2MidiComponent(SubProcessor&);
     virtual ~Audio2MidiComponent();
     virtual void paint(Graphics&) override;
