@@ -56,7 +56,11 @@ void Audio2MidiComponent::paint (Graphics& g)
 LoudnessDecayComponent::LoudnessDecayComponent(SubProcessor& sp)
 : Audio2MidiComponent(sp)
 {
-    
+    decayLabel.setText("Decay", dontSendNotification);
+    addAndMakeVisible(decayLabel);
+    decaySlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    addAndMakeVisible(decaySlider);
+    decayAttachment = new SliderAttachment (parameters, "decay", decaySlider);
 }
 
 LoudnessDecayComponent::~LoudnessDecayComponent()
@@ -94,4 +98,7 @@ void LoudnessDecayComponent::resized()
     Rectangle<int> bottomBar = area.removeFromBottom(30);
     midiOutputComboBox->setBounds(bottomBar.removeFromLeft(100).reduced(4));
 
+    Rectangle<int> decayBox = area.removeFromTop(50).reduced(10);
+    decaySlider.setBounds(decayBox.removeFromLeft(100).reduced(5));
+    decayLabel.setBounds(decayBox.removeFromLeft(50));
 }
