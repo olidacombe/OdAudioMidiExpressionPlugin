@@ -16,7 +16,9 @@
 Audio2MidiComponent::Audio2MidiComponent(SubProcessor& sp)
 : subProcessor(sp), parameters(sp.getParameters())
 {
-    midiOutputComboBox = new MidiOutputComboBox(subProcessor.getMidiOutWorker() );
+    midiOutputComboBox = new MidiOutputComboBox(subProcessor.getMidiOutWorker());
+    
+    levelMeter = new LevelMeter();
     addAndMakeVisible(levelMeter);
 }
 
@@ -86,6 +88,6 @@ void LoudnessDecayComponent::resized()
     // components that your component contains..
     
     Rectangle<int> area = getLocalBounds();
-    levelMeter->setBounds(area.removeFromRight(14).reduced(2));
+    levelMeter->setBounds(area.removeFromRight(24).reduced(4));
 
 }

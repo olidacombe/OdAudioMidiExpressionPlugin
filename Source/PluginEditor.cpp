@@ -65,7 +65,7 @@ void PluginProcessorEditor::resized()
     decaySlider.setBounds(decayBox.removeFromLeft(100));
     decayLabel.setBounds(decayBox.removeFromLeft(50));
     
-    //loudnessDecayComponent->setBounds(area.reduced(2));
+    loudnessDecayComponent->setBounds(area.reduced(2));
 }
 
 
