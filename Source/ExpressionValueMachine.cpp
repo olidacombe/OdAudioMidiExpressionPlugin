@@ -13,7 +13,7 @@
 LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p, const String& id) : ExpressionValueMachine(p, "LoudnessDecay", id), /*decayParam(0.5),*/ currentExpressionValue(0)
 {
     DBG("LoudnessDecayValueMachine::LoudnessDecayValueMachine");
-    setOrCreateAndAddParameter("decay", "Decay", String(),
+    setOrCreateAndAddParameter(uid+".decay", "Decay", String(),
         NormalisableRange<float>(0.0f, 0.99f), 0.75f,
         nullptr, nullptr);
 }
@@ -25,7 +25,7 @@ LoudnessDecayValueMachine::~LoudnessDecayValueMachine()
 
 void LoudnessDecayValueMachine::pushSample(const float& sample)
 {
-    const float *decayParam = parameters.getRawParameterValue("decay");
+    const float *decayParam = parameters.getRawParameterValue(uid+".decay");
     currentExpressionValue = sample + *decayParam * currentExpressionValue;
 }
 
