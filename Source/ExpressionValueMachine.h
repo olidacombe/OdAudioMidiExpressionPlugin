@@ -30,14 +30,16 @@ public:
 class ExpressionValueMachine : public ExpressionValueSource
 {
 public:
-    ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& typeName);
+    ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& typeName, const String& id);
     virtual ~ExpressionValueMachine() {}
     virtual void pushSample(const float& sample)=0;
     const String getTypeName() { return typeName; }
     virtual Audio2MidiComponent* getNewComponent(SubProcessor& parent)=0;
     
 protected:
+    const String uid;
     const String typeName;
+    
     AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
         std::function< String(float)> valueToTextFunction,
@@ -57,7 +59,7 @@ private:
 class LoudnessDecayValueMachine : public ExpressionValueMachine
 {
 public:
-    LoudnessDecayValueMachine(AudioProcessorValueTreeState& p);
+    LoudnessDecayValueMachine(AudioProcessorValueTreeState& p, const String& id);
     ~LoudnessDecayValueMachine();
 
     Audio2MidiComponent* getNewComponent(SubProcessor& parent) override;

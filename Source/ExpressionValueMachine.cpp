@@ -10,7 +10,7 @@
 
 #include "ExpressionValueMachine.h"
 
-LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p, "LoudnessDecay"), /*decayParam(0.5),*/ currentExpressionValue(0)
+LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p, const String& id) : ExpressionValueMachine(p, "LoudnessDecay", id), /*decayParam(0.5),*/ currentExpressionValue(0)
 {
     DBG("LoudnessDecayValueMachine::LoudnessDecayValueMachine");
     setOrCreateAndAddParameter("decay", "Decay", String(),
@@ -46,7 +46,7 @@ Audio2MidiComponent* LoudnessDecayValueMachine::getNewComponent(SubProcessor& pa
 }
 
 
-ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& tn) : typeName(tn), parameters(p)
+ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& tn, const String& id) : typeName(tn), uid(id), parameters(p)
 {
     //initializeParametersState();
 }

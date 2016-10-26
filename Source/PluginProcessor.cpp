@@ -357,6 +357,7 @@ void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
 }
 
 // slated for removal
+/*
 ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
 {
     if(typeName=="LoudnessDecay") {
@@ -369,16 +370,18 @@ ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
     
     return nullptr;
 }
+ */
 
 
 template <typename T>
 SubProcessor* PluginProcessor::addSubProcessor()
 {
+    static int nonce = 0;
     // not doing any type checking at the moment - no dynamism in creation so it's all fixed order, particularly
     // as we index subParameters on getParameterState and sort on setParameterState
     
     AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
-    return subProcessors.add(new SubProcessor(*newParams, midiOutputList, new T(*newParams)));
+    return subProcessors.add(new SubProcessor(*newParams, midiOutputList, new T(*newParams, String(nonce++))));
 }
 
 
