@@ -258,17 +258,14 @@ void PluginProcessor::getStateInformation (MemoryBlock& destData)
     int i=0;
     for(SubProcessor* subProc : subProcessors)
     {
-        
-        ValueTree subProcParams = ValueTree(Identifier("SubProcessor"));
-        subProcParams.setProperty(Identifier("index"), i++, nullptr);
-        ValueTree subProcStateCopy = subProc->state().createCopy();
-        subProcParams.addChild(subProcStateCopy, -1, nullptr);
-        parameters.state.addChild(subProcParams, -1, nullptr);
+        subProc->state().setProperty(Identifier("index"), i++, nullptr);
+        parameters.state.addChild(subProc->state(), -1, nullptr);
     }
     
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
     copyXmlToBinary (*xml, destData);
     
+    DBG("getStateInformation");
     DBG(parameters.state.toXmlString());
     
     //#if JUCE_DEBUG
@@ -316,17 +313,27 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             ValueTree vt;
             while((vt = parameters.state.getChildWithName(Identifier("SubProcessor"))).isValid())
             {
+                parameters.state.removeChild(vt, nullptr);
+                
                 DBG("SubProcessor state read");
                 if(vt.hasProperty("index"))
                 {
+                    
                     SubProcessor* sp = subProcessors[vt["index"]];
                     if(sp != nullptr)
+                    {
+                        DBG("setStateInformation - subProcessor state load");
+                        DBG(vt.toXmlString());
+                    }
                         sp->setParameters(vt);
                 }
-                parameters.state.removeChild(vt, nullptr);
+                
             }
         }
     }
+    
+    DBG("setStateInformation");
+    DBG(parameters.state.toXmlString());
             
     
 }

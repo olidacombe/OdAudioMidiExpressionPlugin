@@ -12,6 +12,7 @@
 
 LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p) : ExpressionValueMachine(p, "LoudnessDecay"), /*decayParam(0.5),*/ currentExpressionValue(0)
 {
+    DBG("LoudnessDecayValueMachine::LoudnessDecayValueMachine");
     setOrCreateAndAddParameter("decay", "Decay", String(),
         NormalisableRange<float>(0.0f, 0.99f), 0.75f,
         nullptr, nullptr);
@@ -62,13 +63,16 @@ AudioProcessorParameter* ExpressionValueMachine::setOrCreateAndAddParameter (Str
         std::function< String(float)> valueToTextFunction,
         std::function< float(const String &)> textToValueFunction)
 {
+    DBG("setOrCreateAndAddParameter");
     AudioProcessorParameter* p = parameters.getParameter(parameterID);
     if(p==nullptr) {
+        DBG("setOfCreateAndAddParameter : not found -> create");
         return parameters.createAndAddParameter(parameterID, parameterName, labelText, valueRange,
             defaultValue, valueToTextFunction, textToValueFunction);
     } else {
         // this isn't taking care of parameters with the same name from different machines having different
         // defaults, ranges, text functions etc :\
+        DBG("setOrCreateAndAddParameter : found -> setValue");
         p->setValue(getDefaultValue(parameterID));
         return p;
     }
