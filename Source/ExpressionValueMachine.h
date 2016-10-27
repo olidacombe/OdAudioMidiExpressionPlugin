@@ -34,17 +34,32 @@ public:
     virtual ~ExpressionValueMachine() {}
     virtual void pushSample(const float& sample)=0;
     const String getTypeName() { return typeName; }
+    const String getUid() { return uid; }
     virtual Audio2MidiComponent* getNewComponent(SubProcessor& parent)=0;
     
 protected:
     const String uid;
     const String typeName;
     
+    String localizedParameterID(const String& parameterID) { return uid + "." + parameterID; }
+    /*
     AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
         std::function< String(float)> valueToTextFunction,
         std::function< float(const String &)> textToValueFunction);
-    
+        */
+    AudioProcessorParameter* createAndAddLocalParameter (String parameterID, String parameterName,
+        String labelText, NormalisableRange< float > valueRange, float defaultValue,
+        std::function< String(float)> valueToTextFunction,
+        std::function< float(const String &)> textToValueFunction)
+    {
+        return parameters.createAndAddParameter(localizedParameterID(parameterID), parameterName, labelText, valueRange,
+                defaultValue, valueToTextFunction, textToValueFunction);
+    }
+    float * getRawLocalParameterValue (StringRef parameterID) noexcept
+    {
+        return parameters.getRawParameterValue(localizedParameterID(parameterID));
+    }
     
     virtual const float getDefaultValue(const String& parameterID) { return 0.0f; }
     AudioProcessorValueTreeState& parameters;

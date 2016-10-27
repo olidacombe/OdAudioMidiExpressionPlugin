@@ -45,6 +45,8 @@ PluginProcessor::PluginProcessor()
         nullptr, nullptr);
     // [/ to go ]
     
+    addSubProcessor<LoudnessDecayValueMachine>();
+    
     // must stay!
     parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
     
@@ -64,7 +66,7 @@ PluginProcessor::PluginProcessor()
     //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
     
     //addSubProcessor("LoudnessDecay");
-    addSubProcessor<LoudnessDecayValueMachine>();
+    
     
 }
 
@@ -255,13 +257,14 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
 
+    /*
     int i=0;
     for(SubProcessor* subProc : subProcessors)
     {
         subProc->state().setProperty(Identifier("index"), i++, nullptr);
         parameters.state.addChild(subProc->state(), -1, nullptr);
     }
-    
+    */
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
     copyXmlToBinary (*xml, destData);
     
@@ -309,7 +312,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             
             // that way we don't overwrite anything wrongly, and new stuff
             // gets created as desired
-            
+            /*
             ValueTree vt;
             while((vt = parameters.state.getChildWithName(Identifier("SubProcessor"))).isValid())
             {
@@ -329,6 +332,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
                 }
                 
             }
+            */
         }
     }
     
@@ -380,8 +384,8 @@ SubProcessor* PluginProcessor::addSubProcessor()
     // not doing any type checking at the moment - no dynamism in creation so it's all fixed order, particularly
     // as we index subParameters on getParameterState and sort on setParameterState
     
-    AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
-    return subProcessors.add(new SubProcessor(*newParams, midiOutputList, new T(*newParams, String(nonce++))));
+    //AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
+    return subProcessors.add(new SubProcessor(parameters, midiOutputList, new T(parameters, String(nonce++))));
 }
 
 

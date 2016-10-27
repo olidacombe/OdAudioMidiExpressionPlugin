@@ -33,7 +33,7 @@ void SubProcessor::initializeParameters()
     parameters.state = ValueTree(Identifier("SubProcessor"));
     parameters.state.setProperty(Identifier ("type"), machine->getTypeName(), nullptr);
     // want a subclass-wide index here?
-    //parameters.state.setProperty(Identifier("id"), id, nullptr);
+    parameters.state.setProperty(Identifier("uid"), machine->getUid(), nullptr);
     ValueTree midiParameters (Identifier("MidiParameters"));
     
     ValueTree midiOutputParameter (Identifier("Output"));
