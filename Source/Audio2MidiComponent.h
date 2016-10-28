@@ -12,7 +12,7 @@
 #define AUDIO2MIDICOMPONENT_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-//#include "SubProcessor.h"
+#include "SubProcessor.h"
 #include "LevelMeter.h"
 //#include "MidiOutWorker.h"
 
@@ -26,10 +26,10 @@ class SubProcessor;
 class MidiOutputComboBox : public ComboBox
 {
 public:
-    MidiOutputComboBox(MidiOutWorker& mow) : midiOutputWorker(mow)
+    MidiOutputComboBox(MidiOutWorker* mow) : midiOutputWorker(mow)
     {}
 private:
-    MidiOutWorker& midiOutputWorker;
+    MidiOutWorker* midiOutputWorker;
 };
 
 
@@ -50,6 +50,8 @@ protected:
 
     ScopedPointer<MidiOutputComboBox> midiOutputComboBox;
     ScopedPointer<LevelMeter> levelMeter;
+    
+    String localizedParameterID(const String& parameterID);
     
 private:
 

@@ -15,8 +15,9 @@
 #include "MidiOutWorker.h"
 #include "Audio2MidiComponent.h"
 
+class Audio2MidiComponent;
+class LoudnessDecayComponent;
 class SubProcessor;
-//class Audio2MidiComponent;
 
 class ExpressionValueSource
 {
@@ -37,11 +38,13 @@ public:
     const String getUid() { return uid; }
     virtual Audio2MidiComponent* getNewComponent(SubProcessor& parent)=0;
     
+    String localizedParameterID(const String& parameterID) { return uid + "." + parameterID; }
+    
 protected:
     const String uid;
     const String typeName;
     
-    String localizedParameterID(const String& parameterID) { return uid + "." + parameterID; }
+    
     /*
     AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,

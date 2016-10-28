@@ -15,7 +15,9 @@
 #include "ExpressionValueMachine.h"
 //#include "Audio2MidiComponent.h"
 
+
 class Audio2MidiComponent;
+class ExpressionValueMachine;
 
 class SubProcessor
 {
@@ -28,6 +30,7 @@ public:
     void setParameters(const ValueTree& source);
     MidiOutWorker& getMidiOutWorker() { return *midiOutWorker; }
     ValueTree& state() { return parameters.state; }
+    ExpressionValueMachine* getMachine() { return machine; }
     
     Audio2MidiComponent* getComponent() { return component; }
     

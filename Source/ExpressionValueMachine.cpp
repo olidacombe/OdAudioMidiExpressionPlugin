@@ -9,6 +9,7 @@
 */
 
 #include "ExpressionValueMachine.h"
+//#include "Audio2MidiComponent.h"
 
 LoudnessDecayValueMachine::LoudnessDecayValueMachine(AudioProcessorValueTreeState& p, const String& id) : ExpressionValueMachine(p, "LoudnessDecay", id), /*decayParam(0.5),*/ currentExpressionValue(0)
 {
@@ -31,7 +32,7 @@ LoudnessDecayValueMachine::~LoudnessDecayValueMachine()
 
 void LoudnessDecayValueMachine::pushSample(const float& sample)
 {
-    const float *decayParam = parameters.getRawParameterValue(uid+".decay");
+    static const float * const decayParam = getRawLocalParameterValue("decay");
     currentExpressionValue = sample + *decayParam * currentExpressionValue;
 }
 

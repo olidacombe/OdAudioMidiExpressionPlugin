@@ -11,13 +11,13 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Audio2MidiComponent.h"
 #include "LevelMeter.h"
-#include "SubProcessor.h"
+//#include "SubProcessor.h"
 
 //==============================================================================
 Audio2MidiComponent::Audio2MidiComponent(SubProcessor& sp)
 : subProcessor(sp), parameters(sp.getParameters())
 {
-    midiOutputComboBox = new MidiOutputComboBox(subProcessor.getMidiOutWorker());
+    midiOutputComboBox = new MidiOutputComboBox(&subProcessor.getMidiOutWorker());
     addAndMakeVisible(midiOutputComboBox);
     
     levelMeter = new LevelMeter();
@@ -53,6 +53,8 @@ void Audio2MidiComponent::paint (Graphics& g)
                 Justification::centred, true);   // draw some placeholder text
 }
 
+String Audio2MidiComponent::localizedParameterID(const String& parameterID) { return subProcessor.getMachine()->localizedParameterID(parameterID); }
+
 LoudnessDecayComponent::LoudnessDecayComponent(SubProcessor& sp)
 : Audio2MidiComponent(sp)
 {
@@ -60,7 +62,7 @@ LoudnessDecayComponent::LoudnessDecayComponent(SubProcessor& sp)
     addAndMakeVisible(decayLabel);
     decaySlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     addAndMakeVisible(decaySlider);
-    decayAttachment = new SliderAttachment (parameters, "decay", decaySlider);
+    decayAttachment = new SliderAttachment (parameters, localizedParameterID("decay"), decaySlider);
 }
 
 LoudnessDecayComponent::~LoudnessDecayComponent()
