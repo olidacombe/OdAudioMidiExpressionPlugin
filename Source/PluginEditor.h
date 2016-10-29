@@ -5,9 +5,7 @@
 #include "PluginProcessor.h"
 #include "Audio2MidiComponent.h"
 
-class PluginProcessorEditor  : public AudioProcessorEditor,
-                                private ComboBox::Listener,
-                                public ChangeListener
+class PluginProcessorEditor  : public AudioProcessorEditor
 {
 public:
     PluginProcessorEditor (PluginProcessor&, AudioProcessorValueTreeState&);
@@ -19,9 +17,6 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-    void setMidiOutput(int index);
-    void comboBoxChanged(ComboBox* box) override;
-    void changeListenerCallback(ChangeBroadcaster* src) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -33,17 +28,11 @@ private:
     
     OwnedArray<Audio2MidiComponent> audio2MidiComponents;
     
-    Label decayLabel;
-    Slider decaySlider;
-    ScopedPointer<SliderAttachment> decayAttachment;
-    
     ToggleButton thruButton;
     ScopedPointer<ButtonAttachment> thruAttachment;
     
     ToggleButton activeButton;
     ScopedPointer<ButtonAttachment> activeAttachment;
-    
-    ComboBox midiOutputList;
 
     void updateAvailableMidiOutputList();
     

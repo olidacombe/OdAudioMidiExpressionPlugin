@@ -10,10 +10,7 @@
 //==============================================================================
 /**
 */
-class PluginProcessor  : public AudioProcessor,
-                        public ExpressionValueSource,
-                        public ChangeBroadcaster,
-                        public ChangeListener
+class PluginProcessor  : public AudioProcessor
 {
 public:
 
@@ -54,20 +51,6 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
-    void changeListenerCallback(ChangeBroadcaster* src) override;
-    
-    // slated for removal
-    int setMidiOutput(int index);
-    int setMidiOutput(const String& name);
-    const String getMidiOutputName();
-    
-    const float getExpressionValue() override;
-    const int getMidiOutputIndex();
-    const bool isActive() override;
-    
-    ExpressionValueMachine* addMachine(const String& typeName);
-    // end slated for removal
     
     SubProcessor& getSubProcessor(int index);
     

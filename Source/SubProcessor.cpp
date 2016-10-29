@@ -46,3 +46,7 @@ void SubProcessor::initializeParameters()
     subProcessorParameters.addChild(midiParameters, -1, nullptr);
 }
 
+
+void SubProcessor::setMidiOutputName(const String& name) {
+    subProcessorParameters.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
+}

@@ -7,7 +7,7 @@
 PluginProcessor::PluginProcessor()
 :   parameters(*this, nullptr), currentExpressionValue(0.0), midiOutputIndex(0)
 {
-    //[ to go ]
+
     parameters.createAndAddParameter ("thru", "Thru", String(),
         NormalisableRange<float> (0.0f, 1.0f, 1.0f), 0.0f,
         [](float value)
@@ -39,22 +39,12 @@ PluginProcessor::PluginProcessor()
     );
 
     
-    // this will go when the machines are implemented mwahahaaaa
-    parameters.createAndAddParameter("decay", "Decay", String(),
-        NormalisableRange<float>(0.0f, 0.99f), 0.75f,
-        nullptr, nullptr);
-    // [/ to go ]
-    
     // all parameters have to be created before giving AudioProcessorValueTreeState
     // a ValueTree!
     addSubProcessor<LoudnessDecayValueMachine>();
     
     initializeState();
-                                          
-    //midiOutputList = new MidiOutputList();
-    midiOutputList->addChangeListener(this);
-    midiOutWorker = new MidiOutWorker(this);
-    // [/ to go ]    
+
     
 }
 
@@ -143,15 +133,10 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // are we sure this runs before an editor is created?
     //setMidiOutput(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
-        
-    setMidiOutput(getMidiOutputName());
-    sendChangeMessage();
+
     previousThru = *parameters.getRawParameterValue ("thru");
 }
 
-const bool PluginProcessor::isActive() {
-    return (*parameters.getRawParameterValue("active") == 1.0f);
-}
 
 void PluginProcessor::releaseResources()
 {
@@ -191,7 +176,6 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     const int numSamples = buffer.getNumSamples();
     
     const float currentThru = *parameters.getRawParameterValue ("thru");
-    const float decayParam = *parameters.getRawParameterValue("decay");
 
     // I dislike this being here a bit
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
@@ -213,7 +197,7 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     
     
     // go atomic...?
-    currentExpressionValue = decayParam * (currentExpressionValue + incomingLoudness);
+    //currentExpressionValue = decayParam * (currentExpressionValue + incomingLoudness);
     
     if (currentThru == previousThru)
     {
@@ -227,32 +211,6 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     }
 }
 
-int PluginProcessor::setMidiOutput(int index) {
-    const int outIndex = midiOutWorker->setMidiOutput(index);
-    String midiOutName("");
-    if(outIndex != -1) {
-        midiOutName = midiOutWorker->getMidiOutputName();
-    }
-    setMidiOutputName(midiOutName);
-    midiOutputIndex = outIndex;
-    return outIndex;
-}
-
-int PluginProcessor::setMidiOutput(const String& name) {
-    const int outIndex = midiOutWorker->setMidiOutput(name);
-    midiOutputIndex = outIndex;
-    return outIndex;
-}
-
-
-
-const String PluginProcessor::getMidiOutputName() {
-    return(parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name"));
-}
-
-void PluginProcessor::setMidiOutputName(const String& name) {
-    parameters.state.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
-}
 
 //==============================================================================
 bool PluginProcessor::hasEditor() const
@@ -295,25 +253,6 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             
     
 }
-
-const float PluginProcessor::getExpressionValue() {
-    return currentExpressionValue;
-}
-
-const int PluginProcessor::getMidiOutputIndex() {
-    return midiOutputIndex;
-}
-
-void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
-    if(src == midiOutputList) {
-        midiOutWorker->stop();
-        
-        setMidiOutput(getMidiOutputName());
-        
-        sendChangeMessage();
-    }
-}
-
 
 
 template <typename T>

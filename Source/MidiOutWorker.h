@@ -32,6 +32,8 @@ public:
     MidiOutputList();
     ~MidiOutputList();
     void timerCallback() override;
+    const StringArray& getOutputList() { return currentOutputList; }
+    int indexOf(const String&);
 private:
     StringArray currentOutputList;
 
@@ -55,8 +57,7 @@ public:
     MidiOutWorker(ExpressionValueSource*);
     ~MidiOutWorker();
     void timerCallback() override;
-    int setMidiOutput(int index);
-    int setMidiOutput(const String& midiOutName);
+    void setMidiOutput(const String& midiOutName);
     const String& getMidiOutputName();
     void stop();
     

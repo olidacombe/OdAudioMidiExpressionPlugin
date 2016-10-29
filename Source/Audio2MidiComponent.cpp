@@ -29,7 +29,7 @@ void MidiOutputComboBox::changeListenerCallback(ChangeBroadcaster* cb)
 }
 
 void MidiOutputComboBox::refreshList() {
-    const StringArray midiOutputs(MidiOutput::getDevices());
+    const StringArray midiOutputs = midiOutputList->getOutputList();
     //const int selectedOutput = processor.getMidiOutputIndex();
 
     // quick and dirty way to address menu update while open
@@ -38,6 +38,10 @@ void MidiOutputComboBox::refreshList() {
     }
     clear(dontSendNotification);
     addItemList(midiOutputs, 1);
+    
+    
+    
+    setSelectedId( midiOutputList->indexOf(midiOutputWorker->getMidiOutputName()) + 1 );
     //midiOutputList.setSelectedId(selectedOutput + 1);
 }
 

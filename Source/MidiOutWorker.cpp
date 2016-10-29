@@ -41,33 +41,10 @@ void MidiOutWorker::sendMessage() {
     midiOutput->sendMessageNow(message);
 }
 
-// return value here + 1 is suitable for passing to ComboBox::setSelectedId()
-int MidiOutWorker::setMidiOutput(int index) {
-    
-    stopTimer();
-    midiOutput = nullptr;
 
-    if (index != -1 && MidiOutput::getDevices() [index].isNotEmpty())
-    {
-        midiOutput = MidiOutput::openDevice (index);
-        
-        if(midiOutput==nullptr)
-            return -1;
-        
-        //jassert (midiOutput);
-        
-        startTimer(30);
-        
-        return index;
-    } 
-    return -1;
-}
-
-// change this to not call MidiOutput::getDevices and try directly
-// from what is held in midiOutput object.  We'll be re-run when that
-// detects a change anyhow.
-int MidiOutWorker::setMidiOutput(const String& midiOutName) {
-    const StringArray midiOuts = MidiOutput::getDevices();
+void MidiOutWorker::setMidiOutput(const String& midiOutName) {
+    //const StringArray midiOuts = MidiOutput::getDevices();
+    const StringArray midiOuts = midiOutputList->getOutputList();
     /*
     const int indexOfRequestedOutput = midiOuts.indexOf(midiOutName);
     if(indexOfRequestedOutput != -1) {
@@ -75,7 +52,8 @@ int MidiOutWorker::setMidiOutput(const String& midiOutName) {
     }
     return indexOfRequestedOutput;
     */
-    return setMidiOutput(midiOuts.indexOf(midiOutName));
+    midiOutput = MidiOutput::openDevice(midiOuts.indexOf(midiOutName));
+    sendChangeMessage();
 }
 
 void MidiOutWorker::stop() {
@@ -95,9 +73,7 @@ void MidiOutWorker::changeListenerCallback(ChangeBroadcaster* cb) {
     DBG("MidiOutWorker::changeListenerCallback");
     if(cb == midiOutputList)
     {
-        DBG("Change from midiOutputList");
         setMidiOutput(getMidiOutputName());
-        sendChangeMessage();
     }
 }
 
@@ -135,4 +111,9 @@ bool MidiOutputList::hasOutputListChanged() {
 
     return false;
     
+}
+
+int MidiOutputList::indexOf(const String& name)
+{
+    return currentOutputList.indexOf(name);
 }
