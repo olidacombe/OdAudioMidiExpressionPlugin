@@ -76,8 +76,7 @@ public:
 private:
     //==============================================================================
 
-    // no no noo, 3 arrays with dependant indices
-    // create a subProcessor class to contain the buddies!
+    void initializeState();
     
     OwnedArray<SubProcessor, CriticalSection> subProcessors;
     

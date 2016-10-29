@@ -49,6 +49,17 @@ PluginProcessor::PluginProcessor()
     // a ValueTree!
     addSubProcessor<LoudnessDecayValueMachine>();
     
+    initializeState();
+                                          
+    //midiOutputList = new MidiOutputList();
+    midiOutputList->addChangeListener(this);
+    midiOutWorker = new MidiOutWorker(this);
+    // [/ to go ]    
+    
+}
+
+void PluginProcessor::initializeState()
+{
     // must stay!
     parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
     
@@ -58,13 +69,14 @@ PluginProcessor::PluginProcessor()
     midiOutputParameter.setProperty("name", "", nullptr);
     midiParameters.addChild(midiOutputParameter, -1, nullptr);
     parameters.state.addChild(midiParameters, -1, nullptr);
-                                          
-    //midiOutputList = new MidiOutputList();
-    midiOutputList->addChangeListener(this);
-    midiOutWorker = new MidiOutWorker(this, midiOutputList);
-    // [/ to go ]    
+    // [/ to go ]
     
+    for(SubProcessor* subProc : subProcessors)
+    {
+        parameters.state.addChild(subProc->state(), -1, nullptr);
+    }
 }
+
 
 PluginProcessor::~PluginProcessor()
 {
@@ -254,11 +266,7 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-    for(SubProcessor* subProc : subProcessors)
-    {
-        parameters.state.addChild(subProc->state(), -1, nullptr);
-    }
-    
+   
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
     copyXmlToBinary (*xml, destData);
     

@@ -13,7 +13,7 @@
 SubProcessor::SubProcessor(AudioProcessorValueTreeState& vts, MidiOutputList* mol, ExpressionValueMachine* mch)
 : parameters(vts), machine(mch)
 {
-    midiOutWorker = new MidiOutWorker(machine, mol);
+    midiOutWorker = new MidiOutWorker(machine);
 
     initializeParameters();
     

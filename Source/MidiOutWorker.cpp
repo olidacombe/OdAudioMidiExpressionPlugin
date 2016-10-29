@@ -12,8 +12,8 @@
 #include "MidiOutWorker.h"
 #include "ExpressionValueMachine.h"
 
-MidiOutWorker::MidiOutWorker(ExpressionValueSource* e, MidiOutputList* mol)
-: lastOutputCCValue(0), currentOutputCCValue(0), evs(e), /*parameters(e->getParameters()),*/ midiOutputList(mol)
+MidiOutWorker::MidiOutWorker(ExpressionValueSource* e)
+: lastOutputCCValue(0), currentOutputCCValue(0), evs(e)
 {
 
 }

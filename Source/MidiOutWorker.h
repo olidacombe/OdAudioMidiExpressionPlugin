@@ -43,7 +43,7 @@ class ExpressionValueSource;
 class MidiOutWorker : public Timer, public ChangeListener, private ChangeBroadcaster
 {
 public:
-    MidiOutWorker(ExpressionValueSource*, MidiOutputList*);
+    MidiOutWorker(ExpressionValueSource*);
     ~MidiOutWorker();
     void timerCallback() override;
     int setMidiOutput(int index);
@@ -58,7 +58,7 @@ private:
     ExpressionValueSource *evs;
     //AudioProcessorValueTreeState& parameters;
     ScopedPointer<MidiOutput> midiOutput;
-    MidiOutputList *midiOutputList;
+    SharedResourcePointer<MidiOutputList> midiOutputList;
 };
 
 
