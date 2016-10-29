@@ -27,7 +27,7 @@ public:
     ~SubProcessor();
     
     AudioProcessorValueTreeState& getParameters() { return parameters; }
-    MidiOutWorker& getMidiOutWorker() { return *midiOutWorker; }
+    MidiOutWorker* getMidiOutWorker() { return midiOutWorker; }
     ValueTree& state() { return subProcessorParameters; }
     ExpressionValueMachine* getMachine() { return machine; }
     

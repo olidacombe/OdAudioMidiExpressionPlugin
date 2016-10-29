@@ -17,8 +17,10 @@
 Audio2MidiComponent::Audio2MidiComponent(SubProcessor& sp)
 : subProcessor(sp), parameters(sp.getParameters())
 {
-    midiOutputComboBox = new MidiOutputComboBox(&subProcessor.getMidiOutWorker());
+    midiOutputComboBox = new MidiOutputComboBox(subProcessor.getMidiOutWorker());
+    midiOutputComboBox->setTextWhenNoChoicesAvailable ("No MIDI Outputs Enabled");
     addAndMakeVisible(midiOutputComboBox);
+    midiOutputComboBox->addListener(subProcessor.getMidiOutWorker());
     
     levelMeter = new LevelMeter();
     addAndMakeVisible(levelMeter);
@@ -35,13 +37,6 @@ Audio2MidiComponent::~Audio2MidiComponent()
 
 void Audio2MidiComponent::paint (Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (Colours::white);   // clear the background
 
     g.setColour (Colours::grey);
@@ -72,13 +67,6 @@ LoudnessDecayComponent::~LoudnessDecayComponent()
 
 void LoudnessDecayComponent::paint (Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (Colours::black);   // clear the background
 
     //g.setColour (Colours::orange);

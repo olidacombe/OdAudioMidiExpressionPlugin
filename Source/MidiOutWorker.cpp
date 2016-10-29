@@ -83,6 +83,8 @@ void MidiOutWorker::stop() {
 }
 
 const String& MidiOutWorker::getMidiOutputName() {
+    if(midiOutput==nullptr)
+        return "";
     return midiOutput->getName();
 }
 

@@ -209,7 +209,9 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
         evm->pushSample(incomingLoudness);
     }
     */
-     
+    
+    
+    
     // go atomic...?
     currentExpressionValue = decayParam * (currentExpressionValue + incomingLoudness);
     
