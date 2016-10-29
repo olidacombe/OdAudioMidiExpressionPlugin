@@ -7,28 +7,6 @@
 #include "SubProcessor.h"
 
 
-// make PluginProcessor::maxMachines of these owned by PluginProcessor, then re-use AudioProcessorValueTreeState's as
-// necessary as ExpressionMachines are added/removed.. (by way of setting expressionValueMachine to nullptr here)
-class ExpressionMachineValueTreeState
-{
-public:
-    // will need a set state method for use by setStateInformation
-    ExpressionMachineValueTreeState(AudioProcessor& processor) :
-        parameters(processor, nullptr), expressionValueMachine(nullptr), available(true) {}
-    ~ExpressionMachineValueTreeState()
-    {
-        expressionValueMachine=nullptr;
-    }
-    bool isAvailable() { return available; }
-    void freeMachine() { expressionValueMachine = nullptr; available=true; }
-    ExpressionValueMachine* getMachine() { return expressionValueMachine; }
-private:
-    AudioProcessorValueTreeState parameters;
-    ScopedPointer<ExpressionValueMachine> expressionValueMachine;
-    bool available;
-};
-
-
 //==============================================================================
 /**
 */
@@ -100,21 +78,22 @@ private:
 
     // no no noo, 3 arrays with dependant indices
     // create a subProcessor class to contain the buddies!
-    OwnedArray<AudioProcessorValueTreeState, CriticalSection> subParameters;
-    OwnedArray<ExpressionValueMachine, CriticalSection> expressionValueMachines;
-    OwnedArray<MidiOutWorker, CriticalSection> midiOutWorkers;
     
     OwnedArray<SubProcessor, CriticalSection> subProcessors;
     
-    ScopedPointer<MidiOutWorker> midiOutWorker;
-    ScopedPointer<MidiOutputList> midiOutputList;
-    AudioProcessorValueTreeState parameters;
+    SharedResourcePointer<MidiOutputList> midiOutputList;
     
+    // [ to go ]
+    ScopedPointer<MidiOutWorker> midiOutWorker;
     float previousThru;
     float currentExpressionValue;
-    
     int midiOutputIndex;
     void setMidiOutputName(const String& name);
+    // [ / to go ]
+    
+    AudioProcessorValueTreeState parameters;
+    
+
     
     template <typename T> SubProcessor* addSubProcessor();
     

@@ -59,7 +59,7 @@ PluginProcessor::PluginProcessor()
     midiParameters.addChild(midiOutputParameter, -1, nullptr);
     parameters.state.addChild(midiParameters, -1, nullptr);
                                           
-    midiOutputList = new MidiOutputList();
+    //midiOutputList = new MidiOutputList();
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
     // [/ to go ]    
@@ -68,7 +68,7 @@ PluginProcessor::PluginProcessor()
 
 PluginProcessor::~PluginProcessor()
 {
-    midiOutputList = nullptr;
+    //midiOutputList = nullptr;
     midiOutWorker = nullptr;
 }
 
@@ -191,11 +191,13 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
         incomingLoudness += buffer.getRMSLevel(channel, 0, numSamples);
     }
     
+    /*
     for(ExpressionValueMachine* evm : expressionValueMachines) {
         // do some shit
         evm->pushSample(incomingLoudness);
     }
-    
+    */
+     
     // go atomic...?
     currentExpressionValue = decayParam * (currentExpressionValue + incomingLoudness);
     
