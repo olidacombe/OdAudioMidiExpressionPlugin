@@ -23,13 +23,16 @@
 class MidiOutWorker;
 class SubProcessor;
 
-class MidiOutputComboBox : public ComboBox
+class MidiOutputComboBox : public ComboBox, public ChangeListener
 {
 public:
-    MidiOutputComboBox(MidiOutWorker* mow) : midiOutputWorker(mow)
-    {}
+    MidiOutputComboBox(MidiOutWorker* mow);
+    void changeListenerCallback(ChangeBroadcaster *);
 private:
+    void refreshList();
+
     MidiOutWorker* midiOutputWorker;
+    SharedResourcePointer<MidiOutputList> midiOutputList;
 };
 
 

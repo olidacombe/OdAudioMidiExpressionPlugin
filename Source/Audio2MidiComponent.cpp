@@ -13,6 +13,33 @@
 #include "LevelMeter.h"
 //#include "SubProcessor.h"
 
+MidiOutputComboBox::MidiOutputComboBox(MidiOutWorker* mow) : midiOutputWorker(mow)
+{
+    refreshList();
+}
+
+void MidiOutputComboBox::changeListenerCallback(ChangeBroadcaster* cb)
+{
+    if(cb==midiOutputList)
+    {
+        refreshList();
+    }
+}
+
+void MidiOutputComboBox::refreshList() {
+    const StringArray midiOutputs(MidiOutput::getDevices());
+    //const int selectedOutput = processor.getMidiOutputIndex();
+
+    // quick and dirty way to address menu update while open
+    if(isPopupActive()) {
+        hidePopup();
+    }
+    clear(dontSendNotification);
+    addItemList(midiOutputs, 1);
+    //midiOutputList.setSelectedId(selectedOutput + 1);
+}
+
+
 //==============================================================================
 Audio2MidiComponent::Audio2MidiComponent(SubProcessor& sp)
 : subProcessor(sp), parameters(sp.getParameters())
