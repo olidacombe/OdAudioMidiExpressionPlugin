@@ -46,11 +46,3 @@ void SubProcessor::initializeParameters()
     subProcessorParameters.addChild(midiParameters, -1, nullptr);
 }
 
-
-void SubProcessor::setParameters(const ValueTree& source)
-{
-    ValueTree machineParams = source.getChildWithName(Identifier(machine->getTypeName()));
-    if(machineParams.isValid()) {
-        parameters.state.copyPropertiesFrom(source, nullptr);
-    }
-}

@@ -58,8 +58,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Audio2MidiComponent)
 };
 
-//inline Audio2MidiComponent::~Audio2MidiComponent() { }
-
 
 class LoudnessDecayComponent : public Audio2MidiComponent
 {

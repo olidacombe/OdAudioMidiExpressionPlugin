@@ -41,6 +41,7 @@ void MidiOutWorker::sendMessage() {
     midiOutput->sendMessageNow(message);
 }
 
+// return value here + 1 is suitable for passing to ComboBox::setSelectedId()
 int MidiOutWorker::setMidiOutput(int index) {
     
     stopTimer();
@@ -49,7 +50,11 @@ int MidiOutWorker::setMidiOutput(int index) {
     if (index != -1 && MidiOutput::getDevices() [index].isNotEmpty())
     {
         midiOutput = MidiOutput::openDevice (index);
-        jassert (midiOutput);
+        
+        if(midiOutput==nullptr)
+            return -1;
+        
+        //jassert (midiOutput);
         
         startTimer(30);
         
@@ -88,6 +93,11 @@ void MidiOutWorker::changeListenerCallback(ChangeBroadcaster* cb) {
     
 }
 
+// shameless assumption
+void MidiOutWorker::comboBoxChanged(ComboBox* src) {
+    DBG("MidiOutWorker::comboBoxChanged");
+    setMidiOutput(getMidiOutputName());
+}
 
 
 MidiOutputList::MidiOutputList()

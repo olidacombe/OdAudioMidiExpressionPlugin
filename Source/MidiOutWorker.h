@@ -24,7 +24,9 @@ to be sent - making that a worker thread.
 
 */
 
-class MidiOutputList : public Timer, public ChangeBroadcaster
+class MidiOutputList :
+    public Timer, 
+    public ChangeBroadcaster
 {
 public:
     MidiOutputList();
@@ -40,7 +42,14 @@ private:
 class PluginProcessor;
 class ExpressionValueSource;
 
-class MidiOutWorker : public Timer, public ChangeListener, private ChangeBroadcaster
+class MidiOutWorker :
+    public Timer,
+    
+    //replace?
+    public ComboBox::Listener,
+    public ChangeListener,
+    
+    private ChangeBroadcaster
 {
 public:
     MidiOutWorker(ExpressionValueSource*);
@@ -50,7 +59,10 @@ public:
     int setMidiOutput(const String& midiOutName);
     const String& getMidiOutputName();
     void stop();
+    
+    // replace?
     void changeListenerCallback(ChangeBroadcaster *) override;
+    void comboBoxChanged(ComboBox* src) override;
 private:
     void sendMessage();
     
