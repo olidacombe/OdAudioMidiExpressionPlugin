@@ -15,12 +15,14 @@
 
 MidiOutputComboBox::MidiOutputComboBox(MidiOutWorker* mow) : midiOutputWorker(mow)
 {
+    midiOutputWorker->addChangeListener(this);
     refreshList();
 }
 
 void MidiOutputComboBox::changeListenerCallback(ChangeBroadcaster* cb)
 {
-    if(cb==midiOutputList)
+    DBG("MidiOutputComboBox::changeListenerCallback");
+    if(cb == midiOutputWorker)
     {
         refreshList();
     }

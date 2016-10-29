@@ -49,7 +49,7 @@ class MidiOutWorker :
     public ComboBox::Listener,
     public ChangeListener,
     
-    private ChangeBroadcaster
+    public ChangeBroadcaster
 {
 public:
     MidiOutWorker(ExpressionValueSource*);

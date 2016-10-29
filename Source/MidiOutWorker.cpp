@@ -15,7 +15,7 @@
 MidiOutWorker::MidiOutWorker(ExpressionValueSource* e)
 : lastOutputCCValue(0), currentOutputCCValue(0), evs(e)
 {
-
+    midiOutputList->addChangeListener(this);
 }
 
 MidiOutWorker::~MidiOutWorker()
@@ -92,13 +92,19 @@ const String& MidiOutWorker::getMidiOutputName() {
 // use this for alert from MidiOutputList that devices have changed, and pass up to 
 // own MidiOutputComboBox via sendChangeMessage()
 void MidiOutWorker::changeListenerCallback(ChangeBroadcaster* cb) {
-    
+    DBG("MidiOutWorker::changeListenerCallback");
+    if(cb == midiOutputList)
+    {
+        DBG("Change from midiOutputList");
+        setMidiOutput(getMidiOutputName());
+        sendChangeMessage();
+    }
 }
 
 // shameless assumption
 void MidiOutWorker::comboBoxChanged(ComboBox* src) {
     DBG("MidiOutWorker::comboBoxChanged");
-    setMidiOutput(getMidiOutputName());
+    setMidiOutput(src->getText());
 }
 
 
@@ -112,9 +118,6 @@ MidiOutputList::~MidiOutputList() {}
 
 void MidiOutputList::timerCallback() {
     if(hasOutputListChanged()) {
-        // maybe midiOutWorker should be handled from here,
-        // with the results broadcast by change messages
-        
         sendChangeMessage();
     }
 }
