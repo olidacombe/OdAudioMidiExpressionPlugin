@@ -62,14 +62,7 @@ PluginProcessor::PluginProcessor()
     midiOutputList = new MidiOutputList();
     midiOutputList->addChangeListener(this);
     midiOutWorker = new MidiOutWorker(this, midiOutputList);
-    // [/ to go ]
-    
-    // slated for removal
-    //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
-    
-    //addSubProcessor("LoudnessDecay");
-    
-    
+    // [/ to go ]    
     
 }
 
@@ -259,11 +252,8 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
-
-    //int i=0;
     for(SubProcessor* subProc : subProcessors)
     {
-        //subProc->state().setProperty(Identifier("index"), i++, nullptr);
         parameters.state.addChild(subProc->state(), -1, nullptr);
     }
     
@@ -272,21 +262,6 @@ void PluginProcessor::getStateInformation (MemoryBlock& destData)
     
     DBG("getStateInformation");
     DBG(parameters.state.toXmlString());
-    
-    //#if JUCE_DEBUG
-    //#if JUCE_OSX
-    
-    /*
-    DBG("DUMP TREE");
-    
-    xml = nullptr;
-    xml = new XmlElement(*saveMe.createXml());
-    const File xmlDebugDump ("/Users/oli/lol.xml");
-    xml->writeToFile(xmlDebugDump, "");
-    */
-    
-    //#endif
-    //#endif
 }
 
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
@@ -299,42 +274,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
         if (xmlState->hasTagName (parameters.state.getType()))
         {  
             parameters.state = ValueTree::fromXml (*xmlState);
-            
-            // sort the SubProcessor elements
-            // ... todo
-            
-            // overwrite our SubProcessor param value trees from here
-            // using SubProcessor.parameters.copyPropertiesFrom
-            // then remove the SubProcessor element from parameters.state
-            // they'll be replaced by getStateInformation.
-            
-            // check the name?  Yes, the above can be done by a method in
-            // ExpressionValueMachine that checks against machine->getName
-            // before performing copyPropertiesFrom
-            
-            // that way we don't overwrite anything wrongly, and new stuff
-            // gets created as desired
-            /*
-            ValueTree vt;
-            while((vt = parameters.state.getChildWithName(Identifier("SubProcessor"))).isValid())
-            {
-                parameters.state.removeChild(vt, nullptr);
-                
-                DBG("SubProcessor state read");
-                if(vt.hasProperty("index"))
-                {
-                    
-                    SubProcessor* sp = subProcessors[vt["index"]];
-                    if(sp != nullptr)
-                    {
-                        DBG("setStateInformation - subProcessor state load");
-                        DBG(vt.toXmlString());
-                    }
-                        sp->setParameters(vt);
-                }
-                
-            }
-            */
+
         }
     }
     
@@ -362,31 +302,13 @@ void PluginProcessor::changeListenerCallback(ChangeBroadcaster* src) {
     }
 }
 
-// slated for removal
-/*
-ExpressionValueMachine* PluginProcessor::addMachine(const String& typeName)
-{
-    if(typeName=="LoudnessDecay") {
-        return expressionValueMachines.add(
-            new LoudnessDecayValueMachine(*subParameters.add(
-                new AudioProcessorValueTreeState(*this, nullptr)
-            ))
-        );
-    }
-    
-    return nullptr;
-}
- */
 
 
 template <typename T>
 SubProcessor* PluginProcessor::addSubProcessor()
 {
     static int nonce = 0;
-    // not doing any type checking at the moment - no dynamism in creation so it's all fixed order, particularly
-    // as we index subParameters on getParameterState and sort on setParameterState
-    
-    //AudioProcessorValueTreeState* const newParams = subParameters.add(new AudioProcessorValueTreeState(*this, nullptr));
+
     return subProcessors.add(new SubProcessor(parameters, midiOutputList, new T(parameters, String(nonce++))));
 }
 
