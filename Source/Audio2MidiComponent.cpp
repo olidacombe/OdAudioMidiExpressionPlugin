@@ -38,9 +38,7 @@ void MidiOutputComboBox::refreshList() {
     }
     clear(dontSendNotification);
     addItemList(midiOutputs, 1);
-    
-    
-    
+
     setSelectedId( midiOutputList->indexOf(midiOutputWorker->getMidiOutputName()) + 1 );
     //midiOutputList.setSelectedId(selectedOutput + 1);
 }

@@ -80,7 +80,11 @@ void MidiOutWorker::changeListenerCallback(ChangeBroadcaster* cb) {
 // shameless assumption
 void MidiOutWorker::comboBoxChanged(ComboBox* src) {
     DBG("MidiOutWorker::comboBoxChanged");
-    setMidiOutput(src->getText());
+    const String selected = src->getText();
+    if(selected != getMidiOutputName())
+    {
+        setMidiOutput(src->getText());
+    }
 }
 
 
