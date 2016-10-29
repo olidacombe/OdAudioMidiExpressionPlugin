@@ -14,8 +14,7 @@ SubProcessor::SubProcessor(AudioProcessorValueTreeState& vts, MidiOutputList* mo
 : parameters(vts), machine(mch)
 {
     midiOutWorker = new MidiOutWorker(machine, mol);
-    
-    // kind of redundant when there's already a stored state - meh
+
     initializeParameters();
     
     component = machine->getNewComponent(*this);
@@ -30,10 +29,10 @@ SubProcessor::~SubProcessor()
 
 void SubProcessor::initializeParameters()
 {
-    parameters.state = ValueTree(Identifier("SubProcessor"));
-    parameters.state.setProperty(Identifier ("type"), machine->getTypeName(), nullptr);
-    // want a subclass-wide index here?
-    parameters.state.setProperty(Identifier("uid"), machine->getUid(), nullptr);
+    subProcessorParameters = ValueTree(Identifier("SubProcessor"));
+    subProcessorParameters.setProperty(Identifier ("type"), machine->getTypeName(), nullptr);
+
+    subProcessorParameters.setProperty(Identifier("uid"), machine->getUid(), nullptr);
     ValueTree midiParameters (Identifier("MidiParameters"));
     
     ValueTree midiOutputParameter (Identifier("Output"));
@@ -44,15 +43,7 @@ void SubProcessor::initializeParameters()
     midiChannelParameter.setProperty("number", "1", nullptr);
     midiParameters.addChild(midiChannelParameter, -1, nullptr);
     
-    parameters.state.addChild(midiParameters, -1, nullptr);
-    
-/*  // an experiment based on worry, based on the appearance that
-    // all AudoProcessorValueTreeState saves are producing the same
-    // list of parameters... differently populated :S
-    float *changeMe = parameters.getRawParameterValue("active");
-    if(changeMe != nullptr)
-        *changeMe=0.5;
-*/
+    subProcessorParameters.addChild(midiParameters, -1, nullptr);
 }
 
 

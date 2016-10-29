@@ -45,6 +45,8 @@ PluginProcessor::PluginProcessor()
         nullptr, nullptr);
     // [/ to go ]
     
+    // all parameters have to be created before giving AudioProcessorValueTreeState
+    // a ValueTree!
     addSubProcessor<LoudnessDecayValueMachine>();
     
     // must stay!
@@ -66,6 +68,7 @@ PluginProcessor::PluginProcessor()
     //midiOutWorkers.add(new MidiOutWorker(addMachine("LoudnessDecay"), midiOutputList));
     
     //addSubProcessor("LoudnessDecay");
+    
     
     
 }
@@ -257,14 +260,13 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
 {
 
-    /*
-    int i=0;
+    //int i=0;
     for(SubProcessor* subProc : subProcessors)
     {
-        subProc->state().setProperty(Identifier("index"), i++, nullptr);
+        //subProc->state().setProperty(Identifier("index"), i++, nullptr);
         parameters.state.addChild(subProc->state(), -1, nullptr);
     }
-    */
+    
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
     copyXmlToBinary (*xml, destData);
     

@@ -29,7 +29,7 @@ public:
     AudioProcessorValueTreeState& getParameters() { return parameters; }
     void setParameters(const ValueTree& source);
     MidiOutWorker& getMidiOutWorker() { return *midiOutWorker; }
-    ValueTree& state() { return parameters.state; }
+    ValueTree& state() { return subProcessorParameters; }
     ExpressionValueMachine* getMachine() { return machine; }
     
     Audio2MidiComponent* getComponent() { return component; }
@@ -37,6 +37,7 @@ public:
 private:
     // maybe instances should own their Audio2MidiComponent ?
     AudioProcessorValueTreeState& parameters;
+    ValueTree subProcessorParameters;
     ScopedPointer<Audio2MidiComponent> component;
     ScopedPointer<ExpressionValueMachine> machine;
     ScopedPointer<MidiOutWorker> midiOutWorker;
