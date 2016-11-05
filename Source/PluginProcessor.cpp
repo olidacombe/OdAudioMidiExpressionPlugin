@@ -194,6 +194,11 @@ void PluginProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiM
     }
     */
     
+    for(SubProcessor* sp : subProcessors)
+    {
+        sp->getMachine()->pushSample(incomingLoudness);
+    }
+    
     
     
     // go atomic...?

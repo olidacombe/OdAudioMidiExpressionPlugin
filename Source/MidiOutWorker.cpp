@@ -52,8 +52,13 @@ void MidiOutWorker::setMidiOutput(const String& midiOutName) {
     }
     return indexOfRequestedOutput;
     */
+    stop();
     midiOutput = MidiOutput::openDevice(midiOuts.indexOf(midiOutName));
     sendChangeMessage();
+    if(midiOutput != nullptr)
+    {
+        startTimer(30);
+    }
 }
 
 void MidiOutWorker::stop() {
