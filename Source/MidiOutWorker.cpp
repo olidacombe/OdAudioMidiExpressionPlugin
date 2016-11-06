@@ -65,7 +65,7 @@ void MidiOutWorker::stop() {
     stopTimer();
 }
 
-const String& MidiOutWorker::getMidiOutputName() {
+String MidiOutWorker::getMidiOutputName() {
     if(midiOutput==nullptr)
         return "";
     return midiOutput->getName();

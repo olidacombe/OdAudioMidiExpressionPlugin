@@ -19,7 +19,8 @@
 class Audio2MidiComponent;
 class ExpressionValueMachine;
 
-class SubProcessor
+class SubProcessor :
+    public ChangeListener
 {
 public:
 
@@ -32,6 +33,8 @@ public:
     ExpressionValueMachine* getMachine() { return machine; }
     
     Audio2MidiComponent* getComponent() { return component; }
+    
+    void changeListenerCallback(ChangeBroadcaster* cb);
     
 private:
     // maybe instances should own their Audio2MidiComponent ?

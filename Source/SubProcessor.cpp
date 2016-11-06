@@ -14,6 +14,7 @@ SubProcessor::SubProcessor(AudioProcessorValueTreeState& vts, MidiOutputList* mo
 : parameters(vts), machine(mch)
 {
     midiOutWorker = new MidiOutWorker(machine);
+    midiOutWorker->addChangeListener(this);
 
     initializeParameters();
     
@@ -44,9 +45,24 @@ void SubProcessor::initializeParameters()
     midiParameters.addChild(midiChannelParameter, -1, nullptr);
     
     subProcessorParameters.addChild(midiParameters, -1, nullptr);
+    
+    DBG(String("SubProcessor::initializeParameters() ") + (subProcessorParameters.getParent().isValid() ? "got parent" : "orphan" ));
 }
 
 
-void SubProcessor::setMidiOutputName(const String& name) {
-    subProcessorParameters.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
+void SubProcessor::setMidiOutputName(const String& name)
+{
+    DBG(String("SubProcessor::setMidiOutputName ") + name);
+    // changes to this didn't seem to reveal themselves in parameters.state - so I clearly misunderstood how ValueTree children work
+    //subProcessorParameters.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
+    parameters.state.getChildWithName("SubProcessor").getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
+    DBG(subProcessorParameters.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name").toString());
+}
+
+void SubProcessor::changeListenerCallback(ChangeBroadcaster* cb)
+{
+    if(cb==midiOutWorker && midiOutWorker != nullptr)
+    {
+        setMidiOutputName(midiOutWorker->getMidiOutputName());
+    }
 }

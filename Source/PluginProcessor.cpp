@@ -53,14 +53,6 @@ void PluginProcessor::initializeState()
     // must stay!
     parameters.state = ValueTree (Identifier ("OdAudioMidiExpressionPlugin"));
     
-    // [ to go ]
-    ValueTree midiParameters (Identifier("MidiParameters"));
-    ValueTree midiOutputParameter (Identifier("Output"));
-    midiOutputParameter.setProperty("name", "", nullptr);
-    midiParameters.addChild(midiOutputParameter, -1, nullptr);
-    parameters.state.addChild(midiParameters, -1, nullptr);
-    // [/ to go ]
-    
     for(SubProcessor* subProc : subProcessors)
     {
         parameters.state.addChild(subProc->state(), -1, nullptr);
@@ -248,6 +240,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
     {
         if (xmlState->hasTagName (parameters.state.getType()))
         {  
+            // here - our referenced child is replaced!
             parameters.state = ValueTree::fromXml (*xmlState);
 
         }

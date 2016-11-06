@@ -58,7 +58,7 @@ public:
     ~MidiOutWorker();
     void timerCallback() override;
     void setMidiOutput(const String& midiOutName);
-    const String& getMidiOutputName();
+    String getMidiOutputName();
     void stop();
     
     // replace?

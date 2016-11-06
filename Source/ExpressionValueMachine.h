@@ -44,13 +44,6 @@ protected:
     const String uid;
     const String typeName;
     
-    
-    /*
-    AudioProcessorParameter* setOrCreateAndAddParameter (String parameterID, String parameterName,
-        String labelText, NormalisableRange< float > valueRange, float defaultValue,
-        std::function< String(float)> valueToTextFunction,
-        std::function< float(const String &)> textToValueFunction);
-        */
     AudioProcessorParameter* createAndAddLocalParameter (String parameterID, String parameterName,
         String labelText, NormalisableRange< float > valueRange, float defaultValue,
         std::function< String(float)> valueToTextFunction,
