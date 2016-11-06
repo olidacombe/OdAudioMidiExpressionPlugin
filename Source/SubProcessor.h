@@ -33,6 +33,10 @@ public:
     ExpressionValueMachine* getMachine() { return machine; }
     
     Audio2MidiComponent* getComponent() { return component; }
+    void setSubProcessorParameters(const ValueTree& spp)
+    {
+        subProcessorParameters = spp;
+    }
     
     void changeListenerCallback(ChangeBroadcaster* cb);
     
