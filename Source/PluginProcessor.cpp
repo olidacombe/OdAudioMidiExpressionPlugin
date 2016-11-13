@@ -153,11 +153,11 @@ bool PluginProcessor::setPreferredBusArrangement (bool isInput, int bus, const A
     if (numChannels != 1 && numChannels != 2)
         return false;
 
-    if (! AudioProcessor::setPreferredBusArrangement (! isInput, bus, preferredSet))
+    if (! setPreferredBusArrangement (! isInput, bus, preferredSet))
         return false;
    #endif
 
-    return AudioProcessor::setPreferredBusArrangement (isInput, bus, preferredSet);
+    return setPreferredBusArrangement (isInput, bus, preferredSet);
 }
 #endif
 
@@ -222,12 +222,11 @@ AudioProcessorEditor* PluginProcessor::createEditor()
 
 //==============================================================================
 void PluginProcessor::getStateInformation (MemoryBlock& destData)
-{
-   
+{   
     ScopedPointer<XmlElement> xml (parameters.state.createXml());
     copyXmlToBinary (*xml, destData);
     
-    DBG("getStateInformation");
+    DBG("getStateInformation:");
     DBG(parameters.state.toXmlString());
 }
 
@@ -257,10 +256,35 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
             added to parameters:
                 parameters.state.addChild(subProc->state(), -1, nullptr);
             */
+            
+            ValueTree sp;
+            while((sp = parameters.state.getChildWithName("SubProcessor")).isValid())
+            {
+                // whatever happens we delete this here
+                parameters.state.removeChild(sp, nullptr);
+                
+                DBG(String("setStateInformation child scan: ") + sp.getProperty("uid", -1).toString());
+                const String uid = sp.getProperty("uid", -1).toString();
+                
+                // uid should never be -1 ... asserted in ExpressionValueMachine constructor
+                SubProcessor* foundSubProcessor = getSubProcessorByUid(uid);
+                
+                if(foundSubProcessor!=nullptr)
+                {
+                    DBG("setStateInformation - setSubProcessorParameters");
+                    foundSubProcessor->setSubProcessorParameters(sp);
+                }
+
+            }
+            
+            for(SubProcessor* sp : subProcessors)
+            {
+                parameters.state.addChild(sp->state(), -1, nullptr);
+            }
         }
     }
     
-    DBG("setStateInformation");
+    DBG("setStateInformation:");
     DBG(parameters.state.toXmlString());
             
     
@@ -283,6 +307,17 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new PluginProcessor();
 }
 
+SubProcessor* PluginProcessor::getSubProcessorByUid(const String& uid)
+{
+    for(SubProcessor* sp : subProcessors)
+    {
+        if(sp->getMachine()->getUid() == uid)
+        {
+            return sp;
+        }
+    }
+    return nullptr;
+}
 
 // this won't be done in such a way
 SubProcessor& PluginProcessor::getSubProcessor(int index)

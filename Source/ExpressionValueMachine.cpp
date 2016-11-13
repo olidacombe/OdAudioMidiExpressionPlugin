@@ -51,6 +51,7 @@ Audio2MidiComponent* LoudnessDecayValueMachine::getNewComponent(SubProcessor& pa
 
 ExpressionValueMachine::ExpressionValueMachine(AudioProcessorValueTreeState& p, const String& tn, const String& id) : typeName(tn), uid(id), parameters(p)
 {
+    jassert(uid != "-1");
     //initializeParametersState();
 }
 

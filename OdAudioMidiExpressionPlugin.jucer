@@ -9,7 +9,7 @@
               pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
               pluginIsMidiEffectPlugin="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="OdAudioMidiExpressionPluginAU"
               pluginRTASCategory="" aaxIdentifier="com.yourcompany.OdAudioMidiExpressionPlugin"
-              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.4">
+              pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.3.0">
   <MAINGROUP id="ZprtxY" name="OdAudioMidiExpressionPlugin">
     <GROUP id="{6D9671D0-4E10-D6D2-D21E-D379EA550EA5}" name="Source">
       <FILE id="SWeV9d" name="ExpressionValueMachine.cpp" compile="1" resource="0"
