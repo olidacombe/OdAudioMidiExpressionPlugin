@@ -50,10 +50,22 @@ void SubProcessor::initializeParameters()
 }
 
 
+void SubProcessor::setSubProcessorParameters(const ValueTree& spp)
+{
+    subProcessorParameters = spp;
+    // problem, this calls parameters.state.... when spp hasn't been re-added yet
+    
+    // so NOTE 1 should probably add subProcessorParameters to parameters here
+    // then set a funciton to rip through subProcessors and add their subParameters
+    // to parameters if this wasn't called
+    
+    //setMidiOutputName(getParametersMidiOutputName());
+}
+
+
 void SubProcessor::setMidiOutputName(const String& name)
 {
     DBG(String("SubProcessor::setMidiOutputName ") + name);
-    // changes to this didn't seem to reveal themselves in parameters.state - so I clearly misunderstood how ValueTree children work
     //subProcessorParameters.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
     parameters.state.getChildWithName("SubProcessor").getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).setProperty("name", name, nullptr);
     DBG(subProcessorParameters.getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name").toString());

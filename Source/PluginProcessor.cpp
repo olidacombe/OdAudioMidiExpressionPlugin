@@ -239,23 +239,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
     {
         if (xmlState->hasTagName (parameters.state.getType()))
         {  
-            // here - our referenced child is replaced!
-            // so following setStateInformation, methods inside SubParameter which modify
-            // subParameterState aren't reflecting in the main AudioProcessorValueTreeState
-            // although I've confirmed when originally made that stuff worked fine
-            // so this needs the references repairing after happening.
-            // Maybe just re-assign SubProcessor.subParameter in this function.  Yes
             parameters.state = ValueTree::fromXml (*xmlState);
-            
-            /*
-            here iterate through SubProcessor children spc, look for a SP with same uid, and
-            call:
-                setSubProcessorParameters(spc);
-            
-            any SubProcessors in subProcessors left out must then have their subProcessorParameters
-            added to parameters:
-                parameters.state.addChild(subProc->state(), -1, nullptr);
-            */
             
             ValueTree sp;
             while((sp = parameters.state.getChildWithName("SubProcessor")).isValid())
@@ -277,6 +261,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 
             }
             
+            // NOTE 1 replace..?
             for(SubProcessor* sp : subProcessors)
             {
                 parameters.state.addChild(sp->state(), -1, nullptr);

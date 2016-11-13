@@ -33,10 +33,7 @@ public:
     ExpressionValueMachine* getMachine() { return machine; }
     
     Audio2MidiComponent* getComponent() { return component; }
-    void setSubProcessorParameters(const ValueTree& spp)
-    {
-        subProcessorParameters = spp;
-    }
+    void setSubProcessorParameters(const ValueTree& spp);
     
     void changeListenerCallback(ChangeBroadcaster* cb);
     
@@ -50,6 +47,10 @@ private:
 
     void initializeParameters();
     void setMidiOutputName(const String& name);
+    const String getParametersMidiOutputName()
+    {
+        return parameters.state.getChildWithName("SubProcessor").getChildWithName(Identifier("MidiParameters")).getChildWithName(Identifier("Output")).getProperty("name", "");
+    }
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SubProcessor)
 };
